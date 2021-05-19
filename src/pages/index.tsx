@@ -18,7 +18,14 @@ import { connect } from "dva";
 import mapStyle from "../assets/style.json";
 import { fromJS } from "immutable";
 
-import MapGL from "react-map-gl";
+import MapGL, {
+  Popup,
+  NavigationControl,
+  FullscreenControl,
+  ScaleControl,
+  GeolocateControl, Marker
+}  from "react-map-gl";
+
 import { GlobalState } from "@/common/types";
 
 import {
@@ -35,6 +42,11 @@ import {
 
 import { actions as curblrActions, geoDataFiles } from "../models/curblr";
 import { TouchPitchHandler } from "mapbox-gl";
+
+
+import ControlPanel from './control-panel';
+import Pins from './pins';
+import CityInfo from './city-info';
 
 var mapboxAccessToken =
   "pk.eyJ1Ijoic2FhZGlxbSIsImEiOiJjamJpMXcxa3AyMG9zMzNyNmdxNDlneGRvIn0.wjlI8r1S_-xxtq2d-W5qPA";
@@ -133,6 +145,38 @@ const dataLayer = fromJS({
 
 // sets average parking length (roughly 7m, per NACTO) for use in estimating length in # of parking spaces
 const avgParkingLength = 7;
+
+
+const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
+c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
+C20.1,15.8,20.2,15.8,20.2,15.7z`;
+
+const SIZE = 20;
+
+
+const geolocateStyle = {
+  top: 0,
+  left: 0,
+  padding: '10px'
+};
+
+const fullscreenControlStyle = {
+  top: 36,
+  left: 0,
+  padding: '10px'
+};
+
+const navStyle = {
+  top: 72,
+  left: 0,
+  padding: '10px'
+};
+
+const scaleControlStyle = {
+  bottom: 36,
+  left: 0,
+  padding: '10px'
+};
 
 
 const renderCurblrData = (
@@ -511,8 +555,90 @@ class Map extends React.Component<PageProps, {}> {
     });
   };
 
+  CityInfo = (props) => {
+    const {info} = props;
+    const displayName = `${info.city}, ${info.state}`;
+  
+    return (
+      <div>
+        <div>
+          {displayName} |{' '}
+          <a
+            target="_new"
+            href={`http://en.wikipedia.org/w/index.php?title=Special:Search&search=${displayName}`}
+          >
+            Wikipedia
+          </a>
+        </div>
+        <img width={240} src={info.image} />
+      </div>
+    );
+  }
+
+  ControlPanel = () => {
+    return (
+      <div className="control-panel">
+        <h3>Marker, Popup, NavigationControl and FullscreenControl </h3>
+        <p>
+          Map showing top 20 most populated cities of the United States. Click on a marker to learn
+          more.
+        </p>
+        <p>
+          Data source:{' '}
+          <a href="https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population">
+            Wikipedia
+          </a>
+        </p>
+        <div className="source-link">
+          <a
+            href="https://github.com/visgl/react-map-gl/tree/6.1-release/examples/controls"
+            target="_new"
+          >
+            View Code ↗
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+
+// Important for perf: the markers never change, avoid rerender when the map viewport changes
+Pins = (props) => {
+  const {data, onClick} = props;
+
+  return data.map((city, index) => (
+    <Marker key={`marker-${index}`} longitude={city.longitude} latitude={city.latitude}>
+      <svg
+        height={SIZE}
+        viewBox="0 0 24 24"
+        style={{
+          cursor: 'pointer',
+          fill: '#d00',
+          stroke: 'none',
+          transform: `translate(${-SIZE / 2}px,${-SIZE}px)`
+        }}
+        onClick={() => onClick(city)}
+      >
+        <path d={ICON} />
+      </svg>
+    </Marker>
+  ));
+}
+
+
   render() {
-    const { viewport, mapStyle, day, time, mode, showHideCard, sl_arrondRef, set_dateTimeRef, data_to_replace, old_VS_new_selector} = this.state;
+    const { viewport,
+            mapStyle,
+            day,
+            time,
+            mode,
+            showHideCard,
+            sl_arrondRef,
+            set_dateTimeRef,
+            data_to_replace,
+            old_VS_new_selector,
+            popupInfo,
+            setPopupInfo} = this.state;
 
   // shows everything. would be great if this could intersect the feature collection with the viewport bounding box. i can't figure it out. for kevin?
   const dt_to_set = (old_VS_new_selector? data_to_replace : this.props.curblr.data);
@@ -709,7 +835,6 @@ class Map extends React.Component<PageProps, {}> {
       // { label: "Baie-d'Urfé", value: "Baie-d'Urfé"},
     ];
 
-
     return (
       <Layout>
         <button onClick={() => this.hideComponent("showHideCard")}>
@@ -723,7 +848,27 @@ class Map extends React.Component<PageProps, {}> {
             mapStyle={mapStyle}
             {...viewport}
             onViewportChange={viewport => this.setState({ viewport })}
-          />
+          >
+             {popupInfo && (
+          <Popup
+            tipSize={5}
+            anchor="top"
+            longitude={popupInfo.longitude}
+            latitude={popupInfo.latitude}
+            closeOnClick={false}
+            onClose={setPopupInfo}
+          >
+            <CityInfo info={popupInfo} />
+          </Popup>
+        )}
+
+        <GeolocateControl style={geolocateStyle} />
+        <FullscreenControl style={fullscreenControlStyle} />
+        <NavigationControl style={navStyle} />
+        <ScaleControl style={scaleControlStyle} />
+      </MapGL>
+
+
         </Content>
         {showHideCard && (
           <Card

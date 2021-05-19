@@ -8,7 +8,7 @@ import {
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@@/history';
-import RendererWrapper0 from '/home/eanoh/Bureau/Fabmob/old/Curblr/erwin_fork_deployed_curb_map/curb-map/src/pages/.umi/LocaleWrapper.jsx';
+import RendererWrapper0 from '/home/eanoh/Bureau/Fabmob/fabmob/Curblr/curb-map/src/pages/.umi/LocaleWrapper.jsx';
 import { routerRedux } from 'dva';
 
 const Router = routerRedux.ConnectedRouter;
@@ -18,6 +18,20 @@ const routes = [
     path: '/',
     component: require('../../layouts/index.tsx').default,
     routes: [
+      {
+        path: '/city-info.html',
+        exact: true,
+        component: require('../city-info.js').default,
+        _title: 'CurbLR Viewer',
+        _title_default: 'CurbLR Viewer',
+      },
+      {
+        path: '/control-panel.html',
+        exact: true,
+        component: require('../control-panel.js').default,
+        _title: 'CurbLR Viewer',
+        _title_default: 'CurbLR Viewer',
+      },
       {
         path: '/index.html',
         exact: true,
@@ -33,9 +47,16 @@ const routes = [
         _title_default: 'CurbLR Viewer',
       },
       {
+        path: '/pins.html',
+        exact: true,
+        component: require('../pins.js').default,
+        _title: 'CurbLR Viewer',
+        _title_default: 'CurbLR Viewer',
+      },
+      {
         component: () =>
           React.createElement(
-            require('/home/eanoh/Bureau/Fabmob/old/Curblr/erwin_fork_deployed_curb_map/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('/home/eanoh/Bureau/Fabmob/fabmob/Curblr/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: false },
           ),
@@ -49,7 +70,7 @@ const routes = [
   {
     component: () =>
       React.createElement(
-        require('/home/eanoh/Bureau/Fabmob/old/Curblr/erwin_fork_deployed_curb_map/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+        require('/home/eanoh/Bureau/Fabmob/fabmob/Curblr/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
           .default,
         { pagesPath: 'src/pages', hasRoutesInConfig: false },
       ),
