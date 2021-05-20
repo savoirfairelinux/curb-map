@@ -47,6 +47,13 @@ const routes = [
         _title_default: 'CurbLR Viewer',
       },
       {
+        path: '/indexb.html',
+        exact: true,
+        component: require('../indexb.tsx').default,
+        _title: 'CurbLR Viewer',
+        _title_default: 'CurbLR Viewer',
+      },
+      {
         path: '/pins.html',
         exact: true,
         component: require('../pins.js').default,

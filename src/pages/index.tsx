@@ -1,15 +1,31 @@
-import React from "react";
-import styles from "./index.css";
 import './index.css';
+import styles from "./index.css";
+import ControlPanel from './control-panel';
+import Pins from './pins';
+import CityInfo from './city-info';
+
+import Geocoder from 'react-map-gl-geocoder'
+
+import React,
+{ useState,
+  useRef,
+  useCallback } from "react";
+
 import axios from 'axios';
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { gapi } from 'gapi-script';
 
-import { Layout, Menu, Icon, Card, Radio, Select, Badge, Button } from "antd";
+import { Layout,
+          Menu,
+          Icon,
+          Card,
+          Radio,
+          Select,
+          Badge,
+Button } from "antd";
 import { Pie } from "ant-design-pro/lib/Charts";
 import "ant-design-pro/dist/ant-design-pro.css"; // Import whole style
 
-const { Header, Content, Footer, Sider } = Layout;
 
 import { formatMessage } from "umi-plugin-locale";
 import { connect } from "dva";
@@ -33,6 +49,7 @@ import {
   CurbFeatureCollection,
   filterCurblrData //TODO FILTER DAY MONTH
 } from "@/common/curblr";
+
 import {
   FeatureCollection,
   featureCollection,
@@ -43,13 +60,10 @@ import {
 import { actions as curblrActions, geoDataFiles } from "../models/curblr";
 import { TouchPitchHandler } from "mapbox-gl";
 
-
-import ControlPanel from './control-panel';
-import Pins from './pins';
-import CityInfo from './city-info';
-
 var mapboxAccessToken =
   "pk.eyJ1Ijoic2FhZGlxbSIsImEiOiJjamJpMXcxa3AyMG9zMzNyNmdxNDlneGRvIn0.wjlI8r1S_-xxtq2d-W5qPA";
+
+const { Header, Content, Footer, Sider } = Layout;
 
 //loads map style
 const defaultMapStyle = fromJS(mapStyle);
@@ -146,7 +160,7 @@ const dataLayer = fromJS({
 // sets average parking length (roughly 7m, per NACTO) for use in estimating length in # of parking spaces
 const avgParkingLength = 7;
 
-
+//
 const ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
 c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
 C20.1,15.8,20.2,15.8,20.2,15.7z`;
@@ -156,26 +170,30 @@ const SIZE = 20;
 
 const geolocateStyle = {
   top: 0,
-  left: 0,
-  padding: '10px'
+  // right: 0,
+  padding: '10px',
+  // width: "60px"
 };
 
 const fullscreenControlStyle = {
   top: 36,
-  left: 0,
-  padding: '10px'
+  // left: 0,
+  padding: '10px',
+  // width: "60px"
 };
 
 const navStyle = {
   top: 72,
-  left: 0,
-  padding: '10px'
+  // left: 0,
+  padding: '10px',
+  // width: "60px"
 };
 
 const scaleControlStyle = {
   bottom: 36,
-  left: 0,
-  padding: '10px'
+  // left: 0,
+  padding: '10px',
+  // width: "60px"
 };
 
 
@@ -348,15 +366,31 @@ class Map extends React.Component<PageProps, {}> {
     sl_arrondRef: "plaza",
     set_dateTimeRef: new Date(),
     data_to_replace: new CurbFeatureCollection(),
-    old_VS_new_selector: false
+    old_VS_new_selector: false,
+    setViewport: null,
+    popupInfo: null,
+    setPopupInfo: null
   };
+  
 
+  geocoderContainerRef = React.createRef();
+  // handleViewportChange = (newViewport) => {
+  //   // this.setViewport(newViewport);
+  // };
+
+  setViewport  = (newViewport) =>{
+
+    // this.state.viewport = newViewport;
+    this.setState({viewport: newViewport});
+  }
   constructor(props: any) {
     super(props);
     this.hideComponent = this.hideComponent.bind(this);
     this.setArrond =  this.setArrond.bind(this);
     this.setDateTime = this.setDateTime.bind(this);
+    this.setViewport = this.setViewport.bind(this)
     this._mapRef = React.createRef();
+
   }
 
   _setMapData = (newData: any) => {
@@ -637,8 +671,11 @@ Pins = (props) => {
             set_dateTimeRef,
             data_to_replace,
             old_VS_new_selector,
+            setViewport,
             popupInfo,
-            setPopupInfo} = this.state;
+            setPopupInfo,
+            geocoderContainerRef
+          } = this.state;
 
   // shows everything. would be great if this could intersect the feature collection with the viewport bounding box. i can't figure it out. for kevin?
   const dt_to_set = (old_VS_new_selector? data_to_replace : this.props.curblr.data);
@@ -653,6 +690,7 @@ Pins = (props) => {
     let curblrStr = JSON.stringify(this.props.curblr.data);
     let curblrDataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(curblrStr);
 
+    
     const ACTIVITY_LENGTH_CALC = {
       "no standing": features.features
         .filter(f => f.properties.activity === "no standing")
@@ -835,6 +873,8 @@ Pins = (props) => {
       // { label: "Baie-d'Urfé", value: "Baie-d'Urfé"},
     ];
 
+
+    
     return (
       <Layout>
         <button onClick={() => this.hideComponent("showHideCard")}>
@@ -849,7 +889,7 @@ Pins = (props) => {
             {...viewport}
             onViewportChange={viewport => this.setState({ viewport })}
           >
-             {popupInfo && (
+          {/* {popupInfo && (
           <Popup
             tipSize={5}
             anchor="top"
@@ -860,14 +900,18 @@ Pins = (props) => {
           >
             <CityInfo info={popupInfo} />
           </Popup>
-        )}
-
+        )} */}
+      <div style={{width:"40px"}}>
         <GeolocateControl style={geolocateStyle} />
         <FullscreenControl style={fullscreenControlStyle} />
         <NavigationControl style={navStyle} />
         <ScaleControl style={scaleControlStyle} />
+      </div>
       </MapGL>
-
+      <div
+        ref={geocoderContainerRef}
+        style={{ position: "absolute", top: 20, left: 20, zIndex: 1 }}
+      />
 
         </Content>
         {showHideCard && (
@@ -1052,6 +1096,7 @@ Pins = (props) => {
           </p>
         </Card>
         )}
+        
         {showHideCard && (
           <Card
           size="small"
@@ -1059,7 +1104,8 @@ Pins = (props) => {
           bordered={true}
           style={{
             position: "fixed",
-            top: "40px",
+            // top: "80px",
+            bottom: "80px",
             right: "40px",
             width: "auto",
             height: "auto",
@@ -1067,18 +1113,28 @@ Pins = (props) => {
             overflow: "auto"
           }}
           >
-          
           <div>
-          <label for="sl_arrondissement">Arrondissement: </label>
-            <select id ="sl_arrondissement"
 
-            // onChange={this.setArrond}
-            onChange={(event) => this.handleChange("sl_arrondRef", event)}
-            >
-            {arrondissements_montreal.map((option) => (
-              <option value={option.value}>{option.label}</option>
-            ))}
-          </select>
+      <Geocoder
+          mapRef={this._mapRef}
+          containerRef={geocoderContainerRef}
+          onViewportChange={viewport => this.setState({ viewport })}
+          mapboxApiAccessToken={mapboxAccessToken}
+          // position="top-left"
+        />
+
+          </div>
+          <div>
+            <label for="sl_arrondissement">Arrondissement: </label>
+              <select id ="sl_arrondissement"
+
+              // onChange={this.setArrond}
+              onChange={(event) => this.handleChange("sl_arrondRef", event)}
+              >
+              {arrondissements_montreal.map((option) => (
+                <option value={option.value}>{option.label}</option>
+              ))}
+            </select>
           </div>
           <div>
           <label for="dt_picker"
