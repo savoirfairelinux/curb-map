@@ -19,20 +19,6 @@ const routes = [
     component: require('../../layouts/index.tsx').default,
     routes: [
       {
-        path: '/city-info.html',
-        exact: true,
-        component: require('../city-info.js').default,
-        _title: 'CurbLR Viewer',
-        _title_default: 'CurbLR Viewer',
-      },
-      {
-        path: '/control-panel.html',
-        exact: true,
-        component: require('../control-panel.js').default,
-        _title: 'CurbLR Viewer',
-        _title_default: 'CurbLR Viewer',
-      },
-      {
         path: '/index.html',
         exact: true,
         component: require('../index.tsx').default,
@@ -47,16 +33,9 @@ const routes = [
         _title_default: 'CurbLR Viewer',
       },
       {
-        path: '/indexb.html',
+        path: '/mapboxAccessToken.html',
         exact: true,
-        component: require('../indexb.tsx').default,
-        _title: 'CurbLR Viewer',
-        _title_default: 'CurbLR Viewer',
-      },
-      {
-        path: '/pins.html',
-        exact: true,
-        component: require('../pins.js').default,
+        component: require('../mapboxAccessToken.tsx').default,
         _title: 'CurbLR Viewer',
         _title_default: 'CurbLR Viewer',
       },
