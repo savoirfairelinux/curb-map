@@ -1,13 +1,14 @@
 import { CurbFeatureCollection } from "@/common/curblr";
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { feature } from "@turf/helpers";
 import "ant-design-pro/dist/ant-design-pro.css"; // Import whole style
 import { Pie } from "ant-design-pro/lib/Charts";
-import { Button, Card, Layout, Radio, Select } from "antd";
+import { Button, Card, Descriptions, Layout, Radio, Select } from "antd";
 import axios from 'axios';
 import { connect } from "dva";
 import { fromJS } from "immutable";
 import React from "react";
-import MapGL, { FullscreenControl, GeolocateControl, Marker, NavigationControl, ScaleControl } from "react-map-gl";
+import MapGL, {Popup, FullscreenControl, GeolocateControl, Marker, NavigationControl, ScaleControl } from "react-map-gl";
 import Geocoder from 'react-map-gl-geocoder';
 //mapstyle, change to dark matter
 import { actions as curblrActions, geoDataFiles } from "../models/curblr";
@@ -46,7 +47,10 @@ class Map extends React.Component<PageProps, {}> {
     set_dateTimeRef: new Date(),
     data_to_replace: new CurbFeatureCollection(),
     old_VS_new_selector: false,
-    setViewport: null
+    mapclicked: false,
+    clickedLong: -73.62756337356329,//sfl
+    clickedLat: 45.533970387611184,
+    description: "You are here!"
   };
   
   constructor(props: any) {
@@ -54,13 +58,11 @@ class Map extends React.Component<PageProps, {}> {
     this.hideComponent = this.hideComponent.bind(this);
     this.setArrond =  this.setArrond.bind(this);
     this.setDateTime = this.setDateTime.bind(this);
-    this.setViewport = this.setViewport.bind(this);
     // this.onClickMap = this.onClickMap.bind(this);
     this._mapRef = React.createRef();
   }
 
   geocoderContainerRef = React.createRef();
-
 
   _setMapData = (newData: any) => {
     const map = this._getMap();
@@ -93,42 +95,77 @@ class Map extends React.Component<PageProps, {}> {
 
     this.setState({ mapStyle });
   };
-
-  setViewport  = (newViewport) =>{
-
-    // this.state.viewport = newViewport;
-    this.setState({viewport: newViewport});
-  };
   
   onClickMap(evt) {
     console.log(evt.lngLat);
+    var coords = evt.lngLat;
+    var description = "Desc";
+    var description = this.getDescriptionFromCoords(coords)
+    this.setState(
+      { mapclicked: false,
+        clickedLong: coords[0],
+        clickedLat: coords[1],
+        description: description
+        });
   };
  
+  getDescriptionFromCoords(coords){
+    var geojsonData = this._getMap().getSource("curblrData")["_data"]
+    var nearestPoint = this.nearest_feature(coords, geojsonData)
+    // console.log(nearestPoint)
+    
+    var description = ""
+    return description
+  }
+  nearest_feature(pointA, vector) {
+    var minDistance = vector.features[0].geometry.distanceTo(pointA, {details: false, edge: true});
+    var index =0;
+    for (var i = 1; i <= vector.features.length - 1; i++) {
+        var dist = vector.features[i].geometry.distanceTo(pointA, {details: false, edge: true});
+        if (dist < minDistance) {
+            index = i;
+            minDistance = dist; 
+        }
+    }
+     return vector.features[index].attributes['sid'];
+  }
+
   componentDidMount() {
     this._loadData();
 
     const map = this._getMap();
 
-    if (map) {
-      // TODO doesn't fire due to overlays div
-      map.on("mouseover", "dataLayer", function(e) {
-        console.log({ e });
-        var coordinates = e.features[0].geometry.coordinates.slice();
+    // if (map) {
+    //   // TODO doesn't fire due to overlays div
+    //   map.on("mouseover", "dataLayer", function(e) {
+    //     console.log({ e });
+    //     var coordinates = e.features[0].geometry.coordinates.slice();
+    //     console.log("coucou: ", coordinates);
+        
+    //     // Ensure that if the map is zoomed out such that multiple
+    //     // copies of the feature are visible, the popup appears
+    //     // over the copy being pointed to.
+    //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    //       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    //     }
+    //     // TODO needs work
+    //     // new mapboxgl.Popup()
+    //     // .setLngLat(coordinates)
+    //     // .setHTML(description)
+    //     // .addTo(map);
+    //   });
+      
+    // }
+    // if (map) {
+    //   map.on('pointermove', function(event) {
 
-        // Ensure that if the map is zoomed out such that multiple
-        // copies of the feature are visible, the popup appears
-        // over the copy being pointed to.
-        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-          coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-        }
-
-        // TODO needs work
-        // new mapboxgl.Popup()
-        // .setLngLat(coordinates)
-        // .setHTML(description)
-        // .addTo(map);
-      });
-    }
+    //   });
+      
+    //   map.getViewport().addEventListener('mouseout', function(evt){
+    //       console.info('out');
+    //   }, false);
+    // }else
+    // {console.log("map is null", map)}
 
     window.onresize = () => {
       const { viewport } = this.state;
@@ -347,7 +384,10 @@ class Map extends React.Component<PageProps, {}> {
             set_dateTimeRef,
             data_to_replace,
             old_VS_new_selector,
-            geocoderContainerRef
+            geocoderContainerRef,
+            clickedLong,
+            clickedLat,
+            description
           } = this.state;
 
   // shows everything. would be great if this could intersect the feature collection with the viewport bounding box. i can't figure it out. for kevin?
@@ -560,6 +600,15 @@ class Map extends React.Component<PageProps, {}> {
             onViewportChange={(viewport) => this.setState({ viewport })}
             onClick={(evt) => this.onClickMap(evt)}
           >
+          <Popup
+            latitude={clickedLat}
+            longitude={clickedLong}
+            closeButton={true}
+            closeOnClick={false}
+            // onClose={() => togglePopup(false)}
+            anchor="top" >
+            <div>{description}</div>
+          </Popup>
             <div style={{ width: "40px" }}>
               {/* , right:"40px", position:"fixed"}}> */}
               <GeolocateControl style={geolocateStyle} />
