@@ -1,6 +1,6 @@
 import { CurbFeatureCollection } from "@/common/curblr";
 import { DateTimePickerComponent } from '@syncfusion/ej2-react-calendars';
-import { feature } from "@turf/helpers";
+import { feature, featureCollection, GeoJSONObject } from "@turf/helpers";
 import "ant-design-pro/dist/ant-design-pro.css"; // Import whole style
 import { Pie } from "ant-design-pro/lib/Charts";
 import { Button, Card, Descriptions, Layout, Radio, Select } from "antd";
@@ -18,7 +18,7 @@ import {
   avgParkingLength, Content, dataLayer, defaultMapStyle, fullscreenControlStyle,
   geolocateStyle, ICON, mapboxAccessToken, mapStateToProps, MAXSTAY_COLOR_MAP, navStyle, PageProps, renderCurblrData, scaleControlStyle, SIZE
 } from "./mapboxAccessToken";
-
+import Geometry from 'ol/geom/Geometry';
 
 class Map extends React.Component<PageProps, {}> {
   _mapRef: any;
@@ -97,7 +97,7 @@ class Map extends React.Component<PageProps, {}> {
   };
   
   onClickMap(evt) {
-    console.log(evt.lngLat);
+    console.log("Clicked Point: ", evt.lngLat);
     var coords = evt.lngLat;
     var description = "Desc";
     var description = this.getDescriptionFromCoords(coords)
@@ -111,24 +111,60 @@ class Map extends React.Component<PageProps, {}> {
  
   getDescriptionFromCoords(coords){
     var geojsonData = this._getMap().getSource("curblrData")["_data"]
-    var nearestPoint = this.nearest_feature(coords, geojsonData)
+    console.log("Geojson Data: ", geojsonData)
+    const closestPlace = this.getClosestFeature(coords, geojsonData)
+    console.log("Closest place: ", closestPlace);
+    // var nearestPoint = this.nearest_feature(coords, geojsonData)
     // console.log(nearestPoint)
+
+    // this.getMinDistance(coords, geojsonData)
     
     var description = ""
     return description
   }
-  nearest_feature(pointA, vector) {
-    var minDistance = vector.features[0].geometry.distanceTo(pointA, {details: false, edge: true});
-    var index =0;
-    for (var i = 1; i <= vector.features.length - 1; i++) {
-        var dist = vector.features[i].geometry.distanceTo(pointA, {details: false, edge: true});
-        if (dist < minDistance) {
-            index = i;
-            minDistance = dist; 
+
+  isPointFeature (Feature) {
+    return (
+        Feature.type === 'Feature'
+        && Feature.geometry.type === 'Point'
+    );
+  }
+  
+  //https://albertoroura.com/get-closest-feature-featurecollection-given-feature/
+  getClosestFeature (coords, FeatureCollection) {
+    const lat1 = coords[1];
+    const lng1 = coords[0];
+    const radLat1 = Math.PI * lat1 / 180;
+    const nauticalMileToMile = Math.PI * 60 * 1.1515;
+
+    let lowestValue = 12451; // Earth average longest semicircle
+    let closestPlace = null;
+
+    for (const i in FeatureCollection.features) {
+        const thisFeature = FeatureCollection.features[i];
+        // console.log(i)
+        // if (!this.isPointFeature(thisFeature)) { //TODO:
+        //     continue;
+        // }
+
+        const lng2 = thisFeature.geometry.coordinates[0][0];
+        const lat2 = thisFeature.geometry.coordinates[0][1];//TODO: gerer le cas des features differents du Point
+        const placeMeta = thisFeature;
+        const radLat2 = Math.PI * lat2 / 180;
+        const theta = lng1 - lng2;
+        const radTheta = Math.PI * theta / 180;
+
+        let dist = Math.sin(radLat1) * Math.sin(radLat2) + Math.cos(radLat1) * Math.cos(radLat2) * Math.cos(radTheta);
+        dist = Math.acos(dist) * 180 / nauticalMileToMile;
+
+        if (dist < lowestValue) {
+            lowestValue = dist;
+            closestPlace = placeMeta;
         }
     }
-     return vector.features[index].attributes['sid'];
-  }
+
+    return closestPlace;
+}
 
   componentDidMount() {
     this._loadData();
