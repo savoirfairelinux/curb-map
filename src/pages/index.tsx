@@ -112,6 +112,7 @@ class Map extends React.Component<PageProps, {}> {
   getDescriptionFromCoords(coords){
     var geojsonData = this._getMap().getSource("curblrData")["_data"]
     console.log("Geojson Data: ", geojsonData)
+    console.log("Data: ", )
     const closestPlace = this.getClosestFeature(coords, geojsonData)
     console.log("Closest place: ", closestPlace);
     // var nearestPoint = this.nearest_feature(coords, geojsonData)
@@ -257,7 +258,8 @@ class Map extends React.Component<PageProps, {}> {
 
   changeGeoData = async (value) => {
 
-    this.state.old_VS_new_selector = false;
+    // this.state.old_VS_new_selector = false;//SetState
+    this.setState({old_VS_new_selector: false});
     await this.props.dispatch(curblrActions.fetchGeoData(value));
     console.log('day changeGeoData', this.state.day)
     console.log('time changeGeoData', this.state.time)
@@ -274,7 +276,8 @@ class Map extends React.Component<PageProps, {}> {
 
   changeGeoDataFromPost = async (data_awaited) => {
   
-    this.state.old_VS_new_selector = true;
+    // this.state.old_VS_new_selector = true;
+    this.setState({old_VS_new_selector: true});
     const data_fetched_njson = await data_awaited;
     var data = renderCurblrData(
       data_fetched_njson,
@@ -306,8 +309,8 @@ class Map extends React.Component<PageProps, {}> {
   };
 
   sendRequest = async () =>{
-    this.state.old_VS_new_selector = true;
-
+    // this.state.old_VS_new_selector = true;
+    this.setState({old_VS_new_selector: true}); 
     let uri = "http://127.0.0.1:8081/items";
 
     const payload = {
@@ -320,11 +323,10 @@ class Map extends React.Component<PageProps, {}> {
     await axios.post(uri, payload)
       .then((response) => {
         console.log(response);
-        // this.state.data_to_replace = response.data;
         console.log(response.data);
-        
-      // this.props.curblr.data = response.data;
-      this.state.data_to_replace = response.data;
+      
+      this.setState({data_to_replace:response.data});
+      // this.state.data_to_replace = response.data;//setState
       this.changeGeoDataFromPost(response.data);
       }, (error) => {
         console.log(error);
