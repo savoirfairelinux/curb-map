@@ -50,7 +50,16 @@ class Map extends React.Component<PageProps, {}> {
     mapclicked: false,
     clickedLong: -73.62756337356329,//sfl
     clickedLat: 45.533970387611184,
-    description: "You are here!"
+    // description: {
+    //   assetType: null,
+    //   sideOfStreet: null,
+    //   streetName: null,
+    //   Fee: null,
+    //   maxStay: null,
+    //   timeSpansDates: null,
+    //   timeSpansDays: null
+    // }
+    description: ""
   };
   
   constructor(props: any) {
@@ -99,7 +108,6 @@ class Map extends React.Component<PageProps, {}> {
   onClickMap(evt) {
     console.log("Clicked Point: ", evt.lngLat);
     var coords = evt.lngLat;
-    var description = "Desc";
     var description = this.getDescriptionFromCoords(coords)
     this.setState(
       { mapclicked: false,
@@ -110,18 +118,40 @@ class Map extends React.Component<PageProps, {}> {
   };
  
   getDescriptionFromCoords(coords){
-    var geojsonData = this._getMap().getSource("curblrData")["_data"]
+    var geojsonData = (this.state.old_VS_new_selector? this.state.data_to_replace : this.props.curblr.data);
+    // var geojsonData = this._getMap().getSource("curblrData")["_data"] //Not the right data to get properties
     console.log("Geojson Data: ", geojsonData)
     console.log("Data: ", )
-    const closestPlace = this.getClosestFeature(coords, geojsonData)
-    console.log("Closest place: ", closestPlace);
-    // var nearestPoint = this.nearest_feature(coords, geojsonData)
-    // console.log(nearestPoint)
+    const closestPlace   = this.getClosestFeature(coords, geojsonData)
+    var Properties     ;
+    var assetType      ;
+    var sideOfStreet   ;      
+    var streetName     ;              
+    var Fee            ;
+    var maxStay        ;                  
+    var timeSpansDays  ;
+    var timeSpansDates ;
+    try{
+      Properties = closestPlace.properties
+      assetType = closestPlace.properties.location.assetType
+      sideOfStreet = closestPlace.properties.location.sideOfStreet
+      streetName = closestPlace.properties.location.streetName
+      Fee = closestPlace.properties.regulations[0].payment.rates[0].fees[0]
+      maxStay = closestPlace.properties.regulations[0].rule.maxStay
+      timeSpansDays =  closestPlace.properties.regulations[0].timeSpans[0].daysOfWeek.days
+      timeSpansDates = closestPlace.properties.regulations[0].timeSpans[0].effectiveDates[0]
+      console.log("Closest place: ",  closestPlace);
+      console.log("Properties: ",     Properties)
+      console.log("assetType: ",      assetType)
+      console.log("sideOfStreet: ",   sideOfStreet)
+      console.log("streetName: ",     streetName)
+      console.log("Fee: ",            Fee)
+      console.log("maxStay: ",      maxStay)
+      console.log("timeSpans: ",    timeSpansDays, timeSpansDates)
+    }catch(err) {console.log("error")}
 
-    // this.getMinDistance(coords, geojsonData)
-    
-    var description = ""
-    return description
+    var desc = [assetType, sideOfStreet, streetName, Fee, maxStay, timeSpansDates, timeSpansDays]
+    return desc
   }
 
   isPointFeature (Feature) {
@@ -309,9 +339,11 @@ class Map extends React.Component<PageProps, {}> {
   };
 
   sendRequest = async () =>{
-    // this.state.old_VS_new_selector = true;
-    this.setState({old_VS_new_selector: true}); 
+    // this.state.old_VS_new_selector = true;//While waiting for response(promise), this creates disparition of data in the card
+    // this.setState({old_VS_new_selector: true});// 
     let uri = "http://127.0.0.1:8081/items";
+    // let uri = "http://143.198.46.93/items";
+
 
     const payload = {
       "true_date_time": this.state.set_dateTimeRef,
@@ -590,7 +622,7 @@ class Map extends React.Component<PageProps, {}> {
       { label: "Outremont", value: "Outremont"},
       // { label: "LaSalle", value: "LaSalle"},
       // { label: "Mont-Royal", value: "Mont-Royal"},
-      { label: "Ville-Marie", value: "Ville-Marie"},
+      // { label: "Ville-Marie", value: "Ville-Marie"},//weird
       { label: "Le Plateau-Mont-Royal", value: "Le Plateau-Mont-Royal"},
       // { label: "Hampstead", value: "Hampstead"},
       { label: "Le Sud-Ouest", value: "Le Sud-Ouest"},
@@ -636,7 +668,7 @@ class Map extends React.Component<PageProps, {}> {
             mapStyle={mapStyle}
             {...viewport}
             onViewportChange={(viewport) => this.setState({ viewport })}
-            onClick={(evt) => this.onClickMap(evt)}
+            // onClick={(evt) => this.onClickMap(evt)}
           >
           <Popup
             latitude={clickedLat}
