@@ -341,8 +341,8 @@ class Map extends React.Component<PageProps, {}> {
   sendRequest = async () =>{
     // this.state.old_VS_new_selector = true;//While waiting for response(promise), this creates disparition of data in the card
     // this.setState({old_VS_new_selector: true});// 
-    let uri = "http://127.0.0.1:8081/items";
-    // let uri = "http://143.198.46.93/items";
+    
+    let uri = "https://143.198.46.93/items";
 
 
     const payload = {
