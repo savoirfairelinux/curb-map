@@ -59,7 +59,12 @@ class Map extends React.Component<PageProps, {}> {
     //   timeSpansDates: null,
     //   timeSpansDays: null
     // }
-    description: ""
+    description: "",
+    b_noBorne: "XXX",
+    b_periodes: "",
+    b_tarif: 0,
+    b_maxStay: 0,
+    b_nomRue: "XXX"
   };
   
   constructor(props: any) {
@@ -113,7 +118,11 @@ class Map extends React.Component<PageProps, {}> {
       { mapclicked: false,
         clickedLong: coords[0],
         clickedLat: coords[1],
-        description: description
+        // b_noBorne: description[0],
+        b_nomRue: description[0],
+        // b_periodes: description[2],
+        b_maxStay: description[2],
+        b_tarif: description[1]
         });
   };
  
@@ -150,7 +159,8 @@ class Map extends React.Component<PageProps, {}> {
       console.log("timeSpans: ",    timeSpansDays, timeSpansDates)
     }catch(err) {console.log("error")}
 
-    var desc = [assetType, sideOfStreet, streetName, Fee, maxStay, timeSpansDates, timeSpansDays]
+    // var desc = [assetType, sideOfStreet, streetName, Fee, maxStay, timeSpansDates, timeSpansDays]
+    var desc = [streetName, Fee, maxStay]
     return desc
   }
 
@@ -457,7 +467,11 @@ class Map extends React.Component<PageProps, {}> {
             geocoderContainerRef,
             clickedLong,
             clickedLat,
-            description
+            // description,
+            b_noBorne,
+            b_periodes,
+            b_tarif,
+            b_nomRue
           } = this.state;
 
   // shows everything. would be great if this could intersect the feature collection with the viewport bounding box. i can't figure it out. for kevin?
@@ -668,7 +682,7 @@ class Map extends React.Component<PageProps, {}> {
             mapStyle={mapStyle}
             {...viewport}
             onViewportChange={(viewport) => this.setState({ viewport })}
-            // onClick={(evt) => this.onClickMap(evt)}
+            onClick={(evt) => this.onClickMap(evt)}
           >
           <Popup
             latitude={clickedLat}
@@ -677,7 +691,15 @@ class Map extends React.Component<PageProps, {}> {
             closeOnClick={false}
             // onClose={() => togglePopup(false)}
             anchor="top" >
-            <div>{description}</div>
+            {/* <div>{description}</div> */}
+            {/* <div>Borne: {b_noBorne}</div> */}
+            <div>Rue: {b_nomRue}</div>
+            <br />
+            <div>Tarif horaire: {b_tarif} dollars</div>
+            <br />
+            {/* <div>Périodes tarifées: </div>
+            <div>{b_periodes}</div> */}
+            
           </Popup>
             <div style={{ width: "40px" }}>
               {/* , right:"40px", position:"fixed"}}> */}
