@@ -2,7 +2,7 @@ import { GlobalState } from "../common/types";
 import { DvaModelBuilder } from "dva-model-creator";
 import { time, day, priority, activity } from "../actions/filter";
 import { fetchGeoData, loadGeoData } from "../actions/geo"
-import geojsonData from '@/assets/data/mtl-subset-places-oasis-bellechasse-plaza.curblr.json';
+import geojsonData from '@/assets/data/mtl-parco-GAY-VILLAGE.filtred.curblr.json';
 import { CurbFeature, CurbFeatureCollection, filterTimeAndDay } from '@/common/curblr';
 import { FeatureCollection, featureCollection, feature, LineString } from '@turf/helpers';
 import {fromJS} from 'immutable';
@@ -27,14 +27,18 @@ const geoDataFiles = [
     // // { path: "mtl-subset-segment_all.curblr.json", label: "MTL - Test" }, //last from data convertÉ
     // // { path: "mtl-subset-segment.curblr.json", label: "mtl" }, //trop lourd pour etre affiche
 
-    { path: "mtl-subset-places-oasis-bellechasse-plaza.curblr.json", label: "1 - mtl - Oasis bellechasse + plaza"},
-    { path: "mtl-parco-places-oasis-bellechasse-plaza.filtred.curblr.json", label: "2 - mtl-parco - Oasis bellechasse + plaza"},
-    { path: "mtl-fusion-places-oasis-bellechasse-plaza.curblr.json", label: "3 - fusion - Oasis bellechasse + plaza"},
+    // { path: "mtl-subset-places-oasis-bellechasse-plaza.curblr.json", label: "1 - mtl - Oasis bellechasse + plaza"},
+    // { path: "mtl-parco-places-oasis-bellechasse-plaza.filtred.curblr.json", label: "2 - mtl-parco - Oasis bellechasse + plaza"},
+    // { path: "mtl-fusion-places-oasis-bellechasse-plaza.curblr.json", label: "3 - fusion - Oasis bellechasse + plaza"},
+    { path: "mtl-parco-DOWNTOWN.filtred.curblr.json", label: "Ville-Marie - Downtown"},
+    { path: "mtl-parco-GAY-VILLAGE.filtred.curblr.json", label: "Ville-Marie - Gay Village"},
+    { path: "mtl-parco-OLD-MONTREAL.filtred.curblr.json", label: "Ville-Marie - Old Montreal"},
+    { path: "mtl-parco-QUARTIER-DES-SPECTACLES.filtred.curblr.json", label: "Ville-Marie - Quartier Des Spectacles"},
 
     // { path: "mtl-parco-Outremont.filtred.curblr.json", label: "mtl-parco - Outremont"},
-    // // { path: "mtl-parco-Ville-Marie.filtred.curblr.json", label: "mtl-parco - Ville-Marie (lent)"}, //> 10 mo (26mo)
+    // { path: "mtl-parco-Ville-Marie.filtred.curblr.json", label: "mtl-parco - Ville-Marie (lent)"}, //> 10 mo (26mo)
     // { path: "mtl-parco-Ahuntsic-Cartierville.filtred.curblr.json", label: "mtl-parco - Ahuntsic-Cartierville"},                  
-    // // { path: "mtl-parco-Le-Plateau-Mont-Royal.filtred.curblr.json", label: "mtl-parco - Le Plateau-Mont-Royal"},                  
+    // { path: "mtl-parco-Le-Plateau-Mont-Royal.filtred.curblr.json", label: "mtl-parco - Le Plateau-Mont-Royal"},                  
     // { path: "mtl-parco-Côte-des-Neiges-Notre-Dame-de-Grâce.filtred.curblr.json", label: "mtl-parco - Côte-des-Neiges-Notre-Dame-de-Grâce"},       
     // { path: "mtl-parco-Lachine.filtred.curblr.json", label: "mtl-parco - Lachine"},                                
     // { path: "mtl-parco-Le-Sud-Ouest.filtred.curblr.json", label: "mtl-parco - Le-Sud-Ouest"}, 
@@ -107,11 +111,12 @@ const initState:GlobalState = {
 async function loadAsset(path : string){
     //../assets/data/
     // little hack, reading the file from github
-    //https://raw.githubusercontent.com/ervinanoh/curb-map/master/src/assets/data/
+    //https://raw.githubusercontent.chubusercontent.com/ervinanoh/curb-map/master/src/assets/data/${path}`);
+    // const data = await response.json();om/ervinanoh/curb-map/master/src/assets/data/
     //or with google drive https://drive.google.com/uc?export=download&id=
     
-    const response = await fetch(`https://raw.githubusercontent.com/ervinanoh/curb-map/master/src/assets/data/${path}`);
-    const data = await response.json();
+    // const response = await fetch(`https://raw.githubusercontent.com/ervinanoh/curb-map/master/src/assets/data/${path}`);
+    // const data = await response.json();
     // this.setState({ totalReactPackages: data.total })
     // return data;
     return await import(`../assets/data/${path}`)

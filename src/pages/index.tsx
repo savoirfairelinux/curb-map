@@ -38,8 +38,11 @@ class Map extends React.Component<PageProps, {}> {
       // PDX viewport 
       // latitude: 46.81214413176751,
       // longitude: -71.20566699900684,
-      latitude: 45.5322288090008, 
-      longitude: -73.63143205202765,
+      //Centre ville
+      longitude: -73.55664074263193,
+      latitude: 45.51326741594903,
+      // latitude: 45.5322288090008, 
+      // longitude: -73.63143205202765,
       zoom: 13
     },
     showHideCard: true,
@@ -704,9 +707,9 @@ class Map extends React.Component<PageProps, {}> {
             <div style={{ width: "40px" }}>
               {/* , right:"40px", position:"fixed"}}> */}
               <GeolocateControl style={geolocateStyle} />
-              <FullscreenControl style={fullscreenControlStyle} />
+              {/* <FullscreenControl style={fullscreenControlStyle} />
               <NavigationControl style={navStyle} />
-              <ScaleControl style={scaleControlStyle} />
+              <ScaleControl style={scaleControlStyle} /> */}
             </div>
           </MapGL>
           <div
@@ -916,7 +919,7 @@ class Map extends React.Component<PageProps, {}> {
           </Card>
         )}
     
-        {showHideCard && (
+        {/* {showHideCard && (
           <Card
             size="small"
             title="Filter"
@@ -979,7 +982,7 @@ class Map extends React.Component<PageProps, {}> {
             </div>
           </Card>
         )}
-    
+     */}
         <Button
           size="small"
           type="primary"
