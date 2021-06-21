@@ -19,21 +19,28 @@ console.error = (...args : any[]) => {
 };
 
 const geoDataFiles = [
-    // // Autres
-    // `DOWNTOWN",
-    //         "QUARTIER DES SPECTACLES",
-    //         "GAY VILLAGE",
-    //         "OLD MONTREAL",
-    //         "JEAN-DRAPEAU",
+    // paro et signalex
     { path: "mtl-parco-DOWNTOWN.filtred.curblr.json", label: "Ville-Marie parco - Downtown"},
     { path: "mtl-subset-segment-downtown.curblr.json", label: "Ville-Marie - Downtown"},
+    
     { path: "mtl-parco-GAY-VILLAGE.filtred.curblr.json", label: "Ville-Marie parco - Gay Village"},
     { path: "mtl-subset-segment-gay-village.curblr.json", label: "Ville-Marie - Gay Village"},
+    
     { path: "mtl-parco-OLD-MONTREAL.filtred.curblr.json", label: "Ville-Marie parco - Old Montreal"},
     { path: "mtl-subset-segment-old-montreal.curblr.json", label: "Ville-Marie - Old Montreal"},
+    
     { path: "mtl-parco-QUARTIER-DES-SPECTACLES.filtred.curblr.json", label: "Ville-Marie parco - Quartier Des Spectacles"},
     { path: "mtl-subset-segment-quartier-des-spectacles.curblr.json", label: "Ville-Marie - Quartier Des Spectacles"},
+    
+    //Jean drapeau n'a pas de parcos
     { path: "mtl-subset-segment-jean-drapeau.curblr.json", label: "Ville-Marie - Jean-Drapeau (pas de parcos)"},
+
+    // fusions
+    { path: "mtl-fusion-segment-downtown.curblr.json", label: "VM - Downtown"},
+    { path: "mtl-fusion-segment-gay-village.curblr.json", label: "VM - Gay Village"},
+    { path: "mtl-fusion-segment-old-montreal.curblr.json", label: "VM - Old Montreal"},
+    { path: "mtl-subset-segment-quartier-des-spectacles.curblr.json", label: "VM - Quartier Des Spectacles"},
+        
 ];
 
 const curblrData = geojsonData as CurbFeatureCollection;
