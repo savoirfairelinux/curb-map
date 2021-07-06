@@ -351,8 +351,9 @@ class Map extends React.Component<PageProps, {}> {
   sendRequest = async () =>{
     // this.state.old_VS_new_selector = true;//While waiting for response(promise), this creates disparition of data in the card
     // this.setState({old_VS_new_selector: true});// 
-    // let uri = "http://127.0.0.1:8081/items";
-    let uri = "https://143.198.46.93/";
+    // let uri = "http://127.0.0.1:8081/"; //when local machine
+    let uri = "http://143.198.46.93:8000"; //when remote
+    // let uri = "https://143.198.46.93/"; //when remote with ssl
 
 
     const payload = {
@@ -361,11 +362,12 @@ class Map extends React.Component<PageProps, {}> {
       "price": 3,
       "minStay": 32
     }
+    console.log(payload)
     //TODO: await
     await axios.post(uri, payload)
       .then((response) => {
-        console.log(response);
-        console.log(response.data);
+        console.log("response: ",response);
+        console.log("response data: ", response.data);
       
       this.setState({data_to_replace:response.data});
       // this.state.data_to_replace = response.data;//setState
