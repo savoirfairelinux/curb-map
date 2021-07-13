@@ -21,7 +21,7 @@ console.error = (...args : any[]) => {
 const geoDataFiles = [
     { path: "mtl-subset-segment-plaza.curblr.json", label: "1 - Signalec - Plaza"},
     { path: "mtl-parco-plaza.curblr.json", label: "2 - Parcometres(AMD) - Plaza"},
-    { path: "mtl-fusion-places-oasis-bellechasse-plaza.curblr.json", label: "3 - Fusion - plaza"},
+    { path: "mtl-fusion-plaza.curblr.json", label: "3 - Fusion - plaza"},
 ];
 
 const curblrData = geojsonData as CurbFeatureCollection;
