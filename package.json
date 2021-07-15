@@ -26,6 +26,7 @@
     "react": "^16.8.6",
     "react-datetime-picker": "^3.2.0",
     "react-dom": "^16.8.6",
+    "react-icons": "^4.2.0",
     "react-map-gl": "^5.0.10",
     "react-map-gl-geocoder": "^2.1.6"
   },
