@@ -19,7 +19,183 @@ import {
   geolocateStyle, ICON, mapboxAccessToken, mapStateToProps, MAXSTAY_COLOR_MAP, navStyle, PageProps, renderCurblrData, scaleControlStyle, SIZE
 } from "./mapboxAccessToken";
 import Geometry from 'ol/geom/Geometry';
-import { AiFillCaretUp, AiFillCaretDown } from "react-icons/ai";
+import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose } from "react-icons/ai";
+import mapboxgl, { LngLat } from "mapbox-gl";
+
+
+/**
+ * Sources:
+ * Bornes de recharge éléctrique https://lecircuitelectrique.com/fr/trouver-une-borne/
+ * Bornes communato: https://montreal.communauto.com/fonctionnement/
+ */
+
+let geojson = {
+  type: 'FeatureCollection',
+  features: [{
+    id: 0,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.608657, 45.539313],
+      properties: {
+        title: 'Station No 181',
+        type: 'communauto',
+        description: '',
+        address: 'St-André et Bélanger',
+        count: 100,
+        price_per_hour: 1,
+        on_street: false
+      }
+    },
+    image: 'https://i.ibb.co/jMM1V13/commauto.png'
+  },
+  {
+    id: 1,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.60406, 45.535913],
+      properties: {
+        title: 'Station No 427',
+        type: 'communauto',
+        description: '',
+        address: 'De Chateaubriand et Beaubien',
+        count: 100,
+        price_per_hour: 1,
+        on_street: false
+      }
+    },
+    image: 'https://i.ibb.co/jMM1V13/commauto.png'
+  },
+  {
+    id: 2,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.604969, 45.537919],
+      properties: {
+        title: 'Station No 034',
+        type: 'communauto',
+        description: '',
+        address: 'Boyer et St-Zotique',
+        count: 100,
+        price_per_hour: 1,
+        on_street: false
+      }
+    },
+    image: 'https://i.ibb.co/jMM1V13/commauto.png'
+  },
+  {
+    id: 3,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.596864, 45.533244],
+      properties: {
+        title: '324 | BSR | RPP | 5808 St-Hubert',
+        type: 'electrique',
+        description: '',
+        address: '5808 St-Hubert Montréal QC H2S 2L7',
+        count: 4,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://svgshare.com/i/ZM1.svg'
+  },
+  {
+    id: 4,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.59958, 45.534474],
+      properties: {
+        title: '313 | BSR | RPP | 6036 St-Hubert',
+        type: 'electrique',
+        description: '',
+        address: '6036 St-Hubert Montréal QC H2S 2L7',
+        count: 2,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://svgshare.com/i/ZM1.svg'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.603005, 45.536686],
+      properties: {
+        title: '301 | BSR | RPP | 6511 St-André',
+        type: 'electrique',
+        description: '',
+        address: '6511 Rue Saint-André Montréal QC H2S 2K7',
+        count: 2,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://svgshare.com/i/ZM1.svg'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.606817, 45.539041],
+      properties: {
+        title: '350 | BSR | RPP | 6776 boyer',
+        type: 'electrique',
+        description: '',
+        address: '6776 Boyer Montréal QC H2S 2J7',
+        count: 2,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://svgshare.com/i/ZM1.svg'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.605241, 45.539199],
+      properties: {
+        title: '307 | BSR | RPP | 1031 St-Zotique',
+        type: 'electrique',
+        description: '',
+        address: '1031 Rue Saint-Zotique E Montréal QC H2S 1N1',
+        count: 2,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://svgshare.com/i/ZM1.svg'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.60495, 45.53813],
+      properties: {
+        title: '307 | BSR | RPP | 1031 St-Zotique',
+        type: 'normal',
+        description: '',
+        address: '',
+        count: 101,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
+  }
+]
+}
+
 
 class Map extends React.Component<PageProps, {}> {
   _mapRef: any;
@@ -41,7 +217,7 @@ class Map extends React.Component<PageProps, {}> {
       // longitude: -71.20566699900684,
       latitude: 45.5375724,
       longitude: -73.6066974,
-      zoom: 15
+      zoom: 16  
     },
     showHideCard: true,
     sl_arrondRef: "plaza",
@@ -65,7 +241,10 @@ class Map extends React.Component<PageProps, {}> {
     b_periodes: "",
     b_tarif: 0,
     b_maxStay: 0,
-    b_nomRue: "XXX"
+    b_nomRue: "XXX",
+    showPopup: false,
+    selectedMarker: {},
+    showFeedBackPopup: false
   };
   
   constructor(props: any) {
@@ -78,6 +257,34 @@ class Map extends React.Component<PageProps, {}> {
   }
 
   geocoderContainerRef = React.createRef();
+
+  /**
+   * Start: Communauto, Electric car chargers, Bixi stations Markers and Popups
+   */
+  markers = geojson.features.map((marker) =>
+    <Marker key={marker.id} longitude={marker.geometry.coordinates[0]} latitude={marker.geometry.coordinates[1]} >
+    <img src={marker.image} style={{ backgroundColor: "white", borderRadius: "50%"}} width="20px" height="20px" onClick={() => {this.setState({
+      showPopup: true,
+      selectedMarker: marker
+    })}} />
+  </Marker>
+  )
+
+  popups = geojson.features.map((marker) =><Popup
+  key={marker.id} 
+  latitude={marker.geometry.coordinates[0]}
+  longitude={marker.geometry.coordinates[1]}
+  closeButton={true}
+  closeOnClick={false}
+  // onClose={() => togglePopup(false)}
+  anchor="top" >
+    <h3>{marker.geometry.title}</h3>
+    <p>{marker.geometry.description}</p>
+  </Popup>
+  )
+  /**
+   * End: Communauto, Electric car chargers, Bixi stations Markers and Popups
+   */
 
   _setMapData = (newData: any) => {
     const map = this._getMap();
@@ -212,6 +419,24 @@ class Map extends React.Component<PageProps, {}> {
     this._loadData();
 
     const map = this._getMap();
+
+    geojson.features.forEach(function (marker) {
+
+      var el = document.createElement('div');
+      el.className = 'marker';
+ 
+      new mapboxgl.Marker(el)
+      .setLngLat([-73.608657, 45.539313])
+      .addTo(map);
+
+    });
+
+    setTimeout(() => {
+      this.setState({
+        showFeedBackPopup: true
+      })
+    }, 5000)
+
 
     // if (map) {
     //   // TODO doesn't fire due to overlays div
@@ -562,19 +787,19 @@ class Map extends React.Component<PageProps, {}> {
 
     const activityPieData = [
       {
-        x: "No Stopping",
+        x: "Arrêt interdit / No Stopping",
         y: ACTIVITY_LENGTH_CALC["no standing"]
       },
       {
-        x: "No Parking",
+        x: "No Parking / Stationnement interdit",
         y: ACTIVITY_LENGTH_CALC["no parking"]
       },
       {
-        x: "Taxi, TNC, Other PUDO",
+        x: "Taxi, TNC, Other PUDO / Taxi et autres",
         y: ACTIVITY_LENGTH_CALC["passenger loading"]
       },
       {
-        x: "Loading",
+        x: "Loading / Débarcadère",
         y: ACTIVITY_LENGTH_CALC["loading"]
       },
       {
@@ -582,15 +807,15 @@ class Map extends React.Component<PageProps, {}> {
         y: ACTIVITY_LENGTH_CALC["transit"]
       },
       {
-        x: "Free Parking",
+        x: "Free Parking / Stationnement gratuit",
         y: ACTIVITY_LENGTH_CALC["free parking"]
       },
       {
-        x: "Paid Parking",
+        x: "Paid Parking / Stationnement payant",
         y: ACTIVITY_LENGTH_CALC["paid parking"]
       },
       {
-        x: "Other Restricted Uses",
+        x: "Other Restricted Uses / Autres restrictions",
         y: ACTIVITY_LENGTH_CALC["restricted"]
       }
     ];
@@ -700,6 +925,8 @@ class Map extends React.Component<PageProps, {}> {
             <div>{b_periodes}</div> */}
             
           </Popup>
+
+          {this.markers}
           </MapGL>
           <div
             ref={geocoderContainerRef}
@@ -707,11 +934,37 @@ class Map extends React.Component<PageProps, {}> {
           />
         </Content>
         
+        {this.state.showPopup && <Card
+          size="small"
+          title={
+            <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.setState({showPopup: !this.state.showPopup})}>
+              <p><img src={this.state.selectedMarker.image} width="25px" style={{ marginRight: "1rem"}} />{this.state.selectedMarker.geometry.properties.title}</p>
+              <div ><AiOutlineClose /></div>
+            </div>
+            }
+          bordered={true}
+          style={{
+            position: "fixed",
+            top: "40px",
+            right: "50px",
+            width: "400px",
+            height: "400px",
+            maxHeight: "100vh",
+            overflow: "auto",
+          }}
+        ><div>
+          <p>{this.state.selectedMarker.geometry.properties.description}</p>
+          <p>{this.state.selectedMarker.geometry.properties.count} places</p>
+          <p>{this.state.selectedMarker.geometry.properties.price_per_hour} $CA /heure</p>
+          <p>{this.state.selectedMarker.geometry.properties.address}</p>
+        </div></Card>}
+
+
         <Card
           size="small"
           title={
             <div style={{ display: "flex", cursor: "pointer"}} onClick={() => this.hideComponent("showHideCard")}>
-              <p>Stationnements Montréal et Québec, QC</p>
+              <p>Stationnements Plaza Saint-Hubert</p>
               <div style={{ marginLeft: "1rem", }} > {showHideCard ? <AiFillCaretDown /> : <AiFillCaretUp />}</div>
             </div>
             }
@@ -727,8 +980,7 @@ class Map extends React.Component<PageProps, {}> {
           }}
         >
           
-          <br />
-          &nbsp; &nbsp;Arrondissement/quartier à afficher:{" "}
+          <div>Données à afficher</div>
           <Select
             onChange={this.changeGeoData}
             style={{
@@ -746,17 +998,15 @@ class Map extends React.Component<PageProps, {}> {
           </Select>
           <br />
           <br />
-          &nbsp; &nbsp;Day:{" "}
           <Select defaultValue={day} onChange={this.changeDay}>
-            <Select.Option value="mo">Monday</Select.Option>
-            <Select.Option value="tu">Tuesday</Select.Option>
-            <Select.Option value="we">Wednesday</Select.Option>
-            <Select.Option value="th">Thursday</Select.Option>
-            <Select.Option value="fr">Friday</Select.Option>
-            <Select.Option value="sa">Saturday</Select.Option>
-            <Select.Option value="su">Sunday</Select.Option>
+            <Select.Option value="mo">Monday / Lundi</Select.Option>
+            <Select.Option value="tu">Tuesday / Mardi</Select.Option>
+            <Select.Option value="we">Wednesday / Mercredi</Select.Option>
+            <Select.Option value="th">Thursday / Jeudi</Select.Option>
+            <Select.Option value="fr">Friday / Vendredi</Select.Option>
+            <Select.Option value="sa">Saturday / Samedi</Select.Option>
+            <Select.Option value="su">Sunday / Dimanche</Select.Option>
           </Select>
-          &nbsp; &nbsp;Time:{" "}
           <Select
             defaultValue={time}
             onChange={this.changeTime}
@@ -794,15 +1044,14 @@ class Map extends React.Component<PageProps, {}> {
           </Select>
           <br />
           <br />
-          &nbsp; &nbsp;View by:{" "}
           <Radio.Group
             defaultValue={mode}
             buttonStyle="solid"
             position="center"
             onChange={this.changeMode}
           >
-            <Radio.Button value="activity">Activity</Radio.Button>
-            <Radio.Button value="maxStay">Max Stay</Radio.Button>
+            <Radio.Button value="activity">Activity / Activité</Radio.Button>
+            <Radio.Button value="maxStay">Max Stay / Durée max</Radio.Button>
           </Radio.Group>
           <br />
           <br />
@@ -899,20 +1148,37 @@ class Map extends React.Component<PageProps, {}> {
           </Button>
           <br />
           <br />
-          <p style={{ "font-size": "11px" }}>
-            Données de stationnements des villes{" "}
+          <p style={{ "fontSize": "11px" }}>
+            Données de stationnements {" "}
             <a href="https://donnees.montreal.ca/ville-de-montreal/stationnement-sur-rue-signalisation-courant">
               {" "}
               de Montréal{" "}
-            </a>{" "}
-            et de
-            <a href="https://www.donneesquebec.ca/recherche/fr/dataset/vque_7">
-              {" "}
-              de Québec{" "}
             </a>
           </p>
+          <p  style={{ "fontSize": "11px" }}><a href="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link">Donnez votre avis / Guive your feedback</a></p>
         </Card>
     
+        {this.state.showFeedBackPopup && <Card
+          size="small"
+          title={
+          <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.setState({showFeedBackPopup: false})}>
+            <p><img src={this.state.selectedMarker.image} width="25px" style={{ marginRight: "1rem"}} />Your feedback / Donnez-nous votre avis</p>
+            <div ><AiOutlineClose /></div>
+          </div>}
+          bordered={true}
+          style={{
+            position: "fixed",
+            left: "45%",
+            top: "40px",
+            width: "400px",
+            height: "600px",
+            maxHeight: "100vh",
+            overflow: "auto",
+          }}
+        >
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="400" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+        </Card>}
+
         <Button
           size="small"
           type="primary"

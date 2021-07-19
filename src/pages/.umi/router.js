@@ -8,7 +8,7 @@ import {
 import dynamic from 'umi/dynamic';
 import renderRoutes from 'umi/lib/renderRoutes';
 import history from '@@/history';
-import RendererWrapper0 from '/home/lgharib/Documents/SFL/fabmob/fabmob/Curblr/curb-map/src/pages/.umi/LocaleWrapper.jsx';
+import RendererWrapper0 from '/home/larbizard/Documents/SFL/fabmob/curb-map/src/pages/.umi/LocaleWrapper.jsx';
 import { routerRedux } from 'dva';
 
 const Router = routerRedux.ConnectedRouter;
@@ -42,7 +42,7 @@ const routes = [
       {
         component: () =>
           React.createElement(
-            require('/home/lgharib/Documents/SFL/fabmob/fabmob/Curblr/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+            require('/home/larbizard/Documents/SFL/fabmob/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
               .default,
             { pagesPath: 'src/pages', hasRoutesInConfig: false },
           ),
@@ -56,7 +56,7 @@ const routes = [
   {
     component: () =>
       React.createElement(
-        require('/home/lgharib/Documents/SFL/fabmob/fabmob/Curblr/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
+        require('/home/larbizard/Documents/SFL/fabmob/curb-map/node_modules/umi-build-dev/lib/plugins/404/NotFound.js')
           .default,
         { pagesPath: 'src/pages', hasRoutesInConfig: false },
       ),

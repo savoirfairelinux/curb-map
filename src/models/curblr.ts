@@ -2,7 +2,7 @@ import { GlobalState } from "../common/types";
 import { DvaModelBuilder } from "dva-model-creator";
 import { time, day, priority, activity } from "../actions/filter";
 import { fetchGeoData, loadGeoData } from "../actions/geo"
-import geojsonData from '@/assets/data/mtl-subset-segment-plaza.curblr.json';
+import geojsonData from '@/assets/data/mtl-fusion-plaza.curblr.json';
 import { CurbFeature, CurbFeatureCollection, filterTimeAndDay } from '@/common/curblr';
 import { FeatureCollection, featureCollection, feature, LineString } from '@turf/helpers';
 import {fromJS} from 'immutable';
@@ -19,9 +19,9 @@ console.error = (...args : any[]) => {
 };
 
 const geoDataFiles = [
-    { path: "mtl-subset-segment-plaza.curblr.json", label: "1 - Signalec - Plaza"},
-    { path: "mtl-parco-plaza.curblr.json", label: "2 - Parcometres(AMD) - Plaza"},
-    { path: "mtl-fusion-plaza.curblr.json", label: "3 - Fusion - plaza"},
+    { path: "mtl-fusion-plaza.curblr.json", label: "Stationnement"},
+    { path: "mtl-subset-segment-plaza.curblr.json", label: "Public"},
+    { path: "mtl-parco-plaza.curblr.json", label: "Payant"},
 ];
 
 const curblrData = geojsonData as CurbFeatureCollection;
