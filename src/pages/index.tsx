@@ -180,9 +180,63 @@ let geojson = {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: [-73.60495, 45.53813],
+      coordinates: [-73.60504580868175, 45.53805504325079],
       properties: {
-        title: '307 | BSR | RPP | 1031 St-Zotique',
+        title: 'Terrain 024- Saint-André',
+        type: 'normal',
+        description: '',
+        address: '',
+        count: 101,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.60147468653966, 45.53633753212596],
+      properties: {
+        title: 'Terrain 303 Saint-André',
+        type: 'normal',
+        description: '',
+        address: '',
+        count: 101,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.612463, 45.540776],
+      properties: {
+        title: 'Terrain 191 - Saint-André',
+        type: 'normal',
+        description: '',
+        address: '',
+        count: 101,
+        price_per_hour: 1,
+        on_street: true
+      }
+    },
+    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
+  },
+  {
+    id: 5,
+    type: 'Feature',
+    geometry: {
+      type: 'Point',
+      coordinates: [-73.60841502145779, 45.53976221327919],
+      properties: {
+        title: 'Terrain 078 Boyer',
         type: 'normal',
         description: '',
         address: '',
@@ -791,15 +845,15 @@ class Map extends React.Component<PageProps, {}> {
         y: ACTIVITY_LENGTH_CALC["no standing"]
       },
       {
-        x: "No Parking / Stationnement interdit",
+        x: "Stationnement interdit / No Parking",
         y: ACTIVITY_LENGTH_CALC["no parking"]
       },
       {
-        x: "Taxi, TNC, Other PUDO / Taxi et autres",
+        x: "Taxi et autres / Taxi, TNC, Other PUDO",
         y: ACTIVITY_LENGTH_CALC["passenger loading"]
       },
       {
-        x: "Loading / Débarcadère",
+        x: "Débarcadère / Loading",
         y: ACTIVITY_LENGTH_CALC["loading"]
       },
       {
@@ -807,15 +861,15 @@ class Map extends React.Component<PageProps, {}> {
         y: ACTIVITY_LENGTH_CALC["transit"]
       },
       {
-        x: "Free Parking / Stationnement gratuit",
+        x: "Stationnement gratuit / Free Parking",
         y: ACTIVITY_LENGTH_CALC["free parking"]
       },
       {
-        x: "Paid Parking / Stationnement payant",
+        x: "Stationnement payant / Paid Parking",
         y: ACTIVITY_LENGTH_CALC["paid parking"]
       },
       {
-        x: "Other Restricted Uses / Autres restrictions",
+        x: "Autres restrictions / Other Restricted Uses",
         y: ACTIVITY_LENGTH_CALC["restricted"]
       }
     ];
@@ -1155,14 +1209,14 @@ class Map extends React.Component<PageProps, {}> {
               de Montréal{" "}
             </a>
           </p>
-          <p  style={{ "fontSize": "11px" }}><a href="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link">Donnez votre avis / Guive your feedback</a></p>
+          <p  style={{ "fontSize": "11px" }}><a href="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link">Donnez-nous votre avis / Guive your feedback</a></p>
         </Card>
     
         {this.state.showFeedBackPopup && <Card
           size="small"
           title={
           <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.setState({showFeedBackPopup: false})}>
-            <p><img src={this.state.selectedMarker.image} width="25px" style={{ marginRight: "1rem"}} />Your feedback / Donnez-nous votre avis</p>
+            <p>Donnez-nous votre avis / Guive us your feedback</p>
             <div ><AiOutlineClose /></div>
           </div>}
           bordered={true}
@@ -1171,12 +1225,12 @@ class Map extends React.Component<PageProps, {}> {
             left: "45%",
             top: "40px",
             width: "400px",
-            height: "600px",
+            height: "800px",
             maxHeight: "100vh",
             overflow: "auto",
           }}
         >
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="400" height="600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
         </Card>}
 
         <Button
