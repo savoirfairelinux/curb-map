@@ -220,10 +220,10 @@ let geojson = {
       properties: {
         title: 'Terrain 191 - Saint-André',
         type: 'normal',
-        description: '',
-        address: '',
+        description: 'Lun au Dim 24 h/24 : 12 $/max jour',
+        address: 'Entre Bélanger et Jean-Talon',
         count: 101,
-        price_per_hour: 1,
+        price_per_hour: 2.75,
         on_street: true
       }
     },
@@ -470,20 +470,10 @@ class Map extends React.Component<PageProps, {}> {
 }
 
   componentDidMount() {
+
     this._loadData();
 
     const map = this._getMap();
-
-    geojson.features.forEach(function (marker) {
-
-      var el = document.createElement('div');
-      el.className = 'marker';
- 
-      new mapboxgl.Marker(el)
-      .setLngLat([-73.608657, 45.539313])
-      .addTo(map);
-
-    });
 
     setTimeout(() => {
       this.setState({

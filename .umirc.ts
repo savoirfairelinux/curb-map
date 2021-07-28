@@ -29,6 +29,13 @@ const config: IConfig =  {
         ],
       },
     }],
+    [
+      'umi-plugin-ga',
+      {
+        code: 'G-9P5KQTT71S',
+        judge: ()=>true // true or false
+      },
+    ],
   ],
 }
 

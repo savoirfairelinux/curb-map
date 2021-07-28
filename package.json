@@ -29,7 +29,8 @@
     "react-dom": "^16.8.6",
     "react-icons": "^4.2.0",
     "react-map-gl": "^5.0.10",
-    "react-map-gl-geocoder": "^2.1.6"
+    "react-map-gl-geocoder": "^2.1.6",
+    "umi-plugin-ga": "^1.1.8"
   },
   "devDependencies": {
     "@types/jest": "^23.3.12",
