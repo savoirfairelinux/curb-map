@@ -21,6 +21,7 @@ import {
 import Geometry from 'ol/geom/Geometry';
 import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose } from "react-icons/ai";
 import mapboxgl, { LngLat } from "mapbox-gl";
+import {isMobile} from 'react-device-detect';
 
 
 /**
@@ -989,9 +990,9 @@ class Map extends React.Component<PageProps, {}> {
           bordered={true}
           style={{
             position: "fixed",
-            top: "40px",
-            right: "50px",
-            width: "400px",
+            top: isMobile ? "100px" : "40px",
+            right: isMobile ? "0" : "50px",
+            width: isMobile ? "100%" : "400px",
             height: "400px",
             maxHeight: "100vh",
             overflow: "auto",
@@ -1016,8 +1017,8 @@ class Map extends React.Component<PageProps, {}> {
           style={{
             position: "fixed",
             top: "40px",
-            left: "50px",
-            width: "400px",
+            left: isMobile ? "0" : "50px",
+            width: isMobile ? "100%" : "400px",
             height: showHideCard ? "auto" : "40px",
             maxHeight: "100vh",
             overflow: "auto",
@@ -1212,15 +1213,15 @@ class Map extends React.Component<PageProps, {}> {
           bordered={true}
           style={{
             position: "fixed",
-            left: "45%",
+            left: isMobile ? "0" : "45%",
             top: "40px",
-            width: "400px",
+            width: isMobile ? "100%" : "400px",
             height: "800px",
             maxHeight: "100vh",
             overflow: "auto",
           }}
         >
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>
         </Card>}
 
         <Button

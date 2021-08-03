@@ -26,6 +26,7 @@
     "package.json": "^2.0.1",
     "react": "^16.8.6",
     "react-datetime-picker": "^3.2.0",
+    "react-device-detect": "^1.17.0",
     "react-dom": "^16.8.6",
     "react-icons": "^4.2.0",
     "react-map-gl": "^5.0.10",
