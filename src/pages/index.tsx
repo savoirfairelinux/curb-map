@@ -188,8 +188,11 @@ let geojson = {
         description: '',
         address: '',
         count: 101,
-        price_per_hour: 1,
-        on_street: true
+        price_per_hour: 2.75,
+        price_per_day: 12,
+        handicapped_count: 1,
+        regulation: '24 h/24',
+        on_street: false
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -206,8 +209,11 @@ let geojson = {
         description: '',
         address: '',
         count: 101,
-        price_per_hour: 1,
-        on_street: true
+        price_per_hour: 2.75,
+        price_per_day: 12,
+        handicapped_count: 2,
+        regulation: '24 h/24',
+        on_street: false
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -225,7 +231,10 @@ let geojson = {
         address: 'Entre Bélanger et Jean-Talon',
         count: 101,
         price_per_hour: 2.75,
-        on_street: true
+        price_per_day: 12,
+        handicapped_count: 0,
+        regulation: '24 h/24',
+        on_street: false
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -239,11 +248,14 @@ let geojson = {
       properties: {
         title: 'Terrain 078 Boyer',
         type: 'normal',
-        description: '',
+        description: '24 h/24 : 14 $/max jour - 3 places réservées aux personnes handicapées',
         address: '',
         count: 101,
-        price_per_hour: 1,
-        on_street: true
+        price_per_hour: 3.50,
+        price_per_day: 14,
+        handicapped_count: 3,
+        regulation: '24 h/24',
+        on_street: false
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -912,8 +924,10 @@ class Map extends React.Component<PageProps, {}> {
           }}
         ><div>
           <p>{this.state.selectedMarker.geometry.properties.description}</p>
-          <p>{this.state.selectedMarker.geometry.properties.count} places</p>
-          <p>{this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png" width="25px" /> {this.state.selectedMarker.geometry.properties.count} places</p>
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/MUTCD_D9-6.svg/1024px-MUTCD_D9-6.svg.png" width="25px"/> {this.state.selectedMarker.geometry.properties.handicapped_count} <FormattedMessage id="handicapped_places" /></p>
+          <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>
+          <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>
           <p>{this.state.selectedMarker.geometry.properties.address}</p>
         </div></Card>}
 

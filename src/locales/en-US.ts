@@ -25,6 +25,8 @@ export default {
   'Autres_restrictions': 'Other Restricted Uses',
   'Download_curblr_data': 'Download CurbLR data',
   'heure': 'hour',
+  'day': 'day',
+  'handicapped_places': 'handicapped places',
   'Tarif_horaire': 'Hourly fee',
   'More_information_about_the_card': 'More information about the card'
 }
