@@ -141,7 +141,7 @@ let geojson = {
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
-    id: 5,
+    id: 6,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -159,7 +159,7 @@ let geojson = {
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
-    id: 5,
+    id: 7,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -177,7 +177,7 @@ let geojson = {
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
-    id: 5,
+    id: 8,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -195,7 +195,7 @@ let geojson = {
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
   },
   {
-    id: 5,
+    id: 9,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -213,7 +213,7 @@ let geojson = {
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
   },
   {
-    id: 5,
+    id: 10,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -231,7 +231,7 @@ let geojson = {
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
   },
   {
-    id: 5,
+    id: 11,
     type: 'Feature',
     geometry: {
       type: 'Point',
@@ -1074,8 +1074,9 @@ class Map extends React.Component<PageProps, {}> {
                 <>
                   <span>
                     {(
-                      activityPieData.reduce((pre, now) => now.y + pre, 0) /
+                      (activityPieData.reduce((pre, now) => now.y + pre, 0) /
                       avgParkingLength
+                    ) + geojson.features.map((current) => current.geometry.properties.count ).reduce((a, b) => a + b, 0)
                     ).toLocaleString("en", {
                       style: "decimal",
                       maximumFractionDigits: 0,
@@ -1156,7 +1157,7 @@ class Map extends React.Component<PageProps, {}> {
             cursor: "pointer" 
           }}
         >
-        <Button type={getLocale() === 'en-US' ? "primary" : "default"} style={{marginRight: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('en-US')}}>EN</Button><Button style={{marginLeft: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('fr-FR')}}>FR</Button>
+        <Button type={getLocale() === 'en-US' ? "primary" : "default"} style={{marginRight: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('en-US')}}>EN</Button><Button type={getLocale() === 'fr-FR' ? "primary" : "default"} style={{marginLeft: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('fr-FR')}}>FR</Button>
         </Card>
 
         <Button
