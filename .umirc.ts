@@ -17,7 +17,10 @@ const config: IConfig =  {
       dll: false,
       locale: {
         enable: true,
-        default: 'en-US',
+        baseNavigator: true,
+        antd: true,
+        default: 'fr-FR',
+        baseSeparator: '-',
       },
       routes: {
         exclude: [

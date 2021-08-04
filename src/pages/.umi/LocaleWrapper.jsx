@@ -19,6 +19,7 @@ const InjectedWrapper = (() => {
   return sfc;
 })();
 
+import 'moment/locale/fr';
 
 const baseNavigator = true;
 const baseSeparator = '-';
@@ -26,7 +27,8 @@ const useLocalStorage = true;
 
 import { LocaleProvider, version } from 'antd';
 import moment from 'moment';
-let defaultAntd = require('antd/es/locale-provider/en_US');
+import 'moment/locale/fr';
+let defaultAntd = require('antd/es/locale-provider/fr_FR');
 defaultAntd = defaultAntd.default || defaultAntd;
 
 const localeInfo = {
@@ -39,18 +41,27 @@ const localeInfo = {
     data: require('react-intl/locale-data/en'),
     momentLocale: '',
   },
+  'fr-FR': {
+    messages: {
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/larbizard/Documents/SFL/fabmob/curb-map/src/locales/fr-FR.ts')),
+    },
+    locale: 'fr-FR',
+    antd: require('antd/es/locale-provider/fr_FR'),
+    data: require('react-intl/locale-data/fr'),
+    momentLocale: 'fr',
+  },
 };
 
 class LocaleWrapper extends React.Component{
   state = {
-    locale: 'en-US',
+    locale: 'fr-FR',
   };
   getAppLocale(){
     let appLocale = {
-      locale: 'en-US',
+      locale: 'fr-FR',
       messages: {},
-      data: require('react-intl/locale-data/en'),
-      momentLocale: '',
+      data: require('react-intl/locale-data/fr'),
+      momentLocale: 'fr',
     };
 
     const runtimeLocale = require('umi/_runtimePlugin').mergeConfig('locale') || {};
@@ -71,7 +82,7 @@ class LocaleWrapper extends React.Component{
     } else if(localeInfo[runtimeLocaleDefault]){
       appLocale = localeInfo[runtimeLocaleDefault];
     } else {
-      appLocale = localeInfo['en-US'] || appLocale;
+      appLocale = localeInfo['fr-FR'] || appLocale;
     }
     window.g_lang = appLocale.locale;
     window.g_langSeparator = baseSeparator || '-';

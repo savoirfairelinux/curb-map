@@ -22,7 +22,7 @@ import Geometry from 'ol/geom/Geometry';
 import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose } from "react-icons/ai";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import {isMobile} from 'react-device-detect';
-
+import { formatMessage, setLocale, getLocale, FormattedMessage } from 'umi-plugin-locale';
 
 /**
  * Sources:
@@ -291,7 +291,7 @@ class Map extends React.Component<PageProps, {}> {
     this.hideComponent = this.hideComponent.bind(this);
     this.setArrond =  this.setArrond.bind(this);
     this.setDateTime = this.setDateTime.bind(this);
-    // this.onClickMap = this.onClickMap.bind(this);
+    // this.onClickMap = this.onClickMap.bind(this);f
     this._mapRef = React.createRef();
   }
 
@@ -765,35 +765,59 @@ class Map extends React.Component<PageProps, {}> {
 
     const activityPieData = [
       {
-        x: "Arrêt interdit / No Stopping",
+        x: formatMessage(
+          {
+            id: 'Arret_interdit',
+          }),
         y: ACTIVITY_LENGTH_CALC["no standing"]
       },
       {
-        x: "Stationnement interdit / No Parking",
+        x: formatMessage(
+          {
+            id: 'Stationnement_interdit',
+          }),
         y: ACTIVITY_LENGTH_CALC["no parking"]
       },
       {
-        x: "Taxi et autres / Taxi, TNC, Other PUDO",
+        x: formatMessage(
+          {
+            id: 'Taxis_autres',
+          }),
         y: ACTIVITY_LENGTH_CALC["passenger loading"]
       },
       {
-        x: "Débarcadère / Loading",
+        x: formatMessage(
+          {
+            id: 'Debarcaderes',
+          }),
         y: ACTIVITY_LENGTH_CALC["loading"]
       },
       {
-        x: "Transit",
+        x: formatMessage(
+          {
+            id: 'Transit',
+          }),
         y: ACTIVITY_LENGTH_CALC["transit"]
       },
       {
-        x: "Stationnement gratuit / Free Parking",
+        x: formatMessage(
+          {
+            id: 'Stationnement_gratuit',
+          }),
         y: ACTIVITY_LENGTH_CALC["free parking"]
       },
       {
-        x: "Stationnement payant / Paid Parking",
+        x: formatMessage(
+          {
+            id: 'Stationnement_payant',
+          }),
         y: ACTIVITY_LENGTH_CALC["paid parking"]
       },
       {
-        x: "Autres restrictions / Other Restricted Uses",
+        x: formatMessage(
+          {
+            id: 'Autres_restrictions',
+          }),
         y: ACTIVITY_LENGTH_CALC["restricted"]
       }
     ];
@@ -856,7 +880,7 @@ class Map extends React.Component<PageProps, {}> {
             anchor="top" >
             <div>Rue: {b_nomRue}</div>
             <br />
-            <div>Tarif horaire: {b_tarif} dollars</div>
+            <div><FormattedMessage id="Tarif_horaire" />: {b_tarif} dollars</div>
             <br />            
           </Popup>
 
@@ -879,8 +903,8 @@ class Map extends React.Component<PageProps, {}> {
           bordered={true}
           style={{
             position: "fixed",
-            top: isMobile ? "100px" : "40px",
-            right: isMobile ? "0" : "50px",
+            top: isMobile ? "130px" : "60px",
+            right: isMobile ? "0" : "20px",
             width: isMobile ? "100%" : "400px",
             height: "400px",
             maxHeight: "100vh",
@@ -889,7 +913,7 @@ class Map extends React.Component<PageProps, {}> {
         ><div>
           <p>{this.state.selectedMarker.geometry.properties.description}</p>
           <p>{this.state.selectedMarker.geometry.properties.count} places</p>
-          <p>{this.state.selectedMarker.geometry.properties.price_per_hour} $CA /heure</p>
+          <p>{this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>
           <p>{this.state.selectedMarker.geometry.properties.address}</p>
         </div></Card>}
 
@@ -897,15 +921,15 @@ class Map extends React.Component<PageProps, {}> {
         <Card
           size="small"
           title={
-            <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.hideComponent("showHideCard")}>
-              <p>Stationnements Plaza Saint-Hubert</p>
-              <div style={{ marginLeft: "1rem", }} > {showHideCard ? <AiFillCaretDown /> : <AiFillCaretUp />}</div>
+            <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.hideComponent("showHideCard")} >
+              <p><FormattedMessage id="STATIONNEMENTS_PLAZA_SAINT_HUBERT" /></p>
+              <div style={{ marginLeft: "1rem", }} >{showHideCard ? <AiFillCaretDown /> : <AiFillCaretUp />}</div>
             </div>
             }
           bordered={true}
           style={{
             position: "fixed",
-            top: "40px",
+            top: isMobile ? "75px": "10px",
             left: isMobile ? "0" : "50px",
             width: isMobile ? "100%" : "400px",
             height: showHideCard ? "auto" : "40px",
@@ -914,7 +938,7 @@ class Map extends React.Component<PageProps, {}> {
           }}
         >
           
-          <div>Données à afficher</div>
+          <div><FormattedMessage id="DONNEES_A_AFFICHER"/></div>
           <Select
             onChange={this.changeGeoData}
             style={{
@@ -936,13 +960,13 @@ class Map extends React.Component<PageProps, {}> {
               width: isMobile ? "100%" : "49.5%",
             }}
           >
-            <Select.Option value="mo">Monday / Lundi</Select.Option>
-            <Select.Option value="tu">Tuesday / Mardi</Select.Option>
-            <Select.Option value="we">Wednesday / Mercredi</Select.Option>
-            <Select.Option value="th">Thursday / Jeudi</Select.Option>
-            <Select.Option value="fr">Friday / Vendredi</Select.Option>
-            <Select.Option value="sa">Saturday / Samedi</Select.Option>
-            <Select.Option value="su">Sunday / Dimanche</Select.Option>
+            <Select.Option value="mo"><FormattedMessage id="Monday" /></Select.Option>
+            <Select.Option value="tu"><FormattedMessage id="Tuesday" /></Select.Option>
+            <Select.Option value="we"><FormattedMessage id="Wednesday" /></Select.Option>
+            <Select.Option value="th"><FormattedMessage id="Thursday" /></Select.Option>
+            <Select.Option value="fr"><FormattedMessage id="Friday" /></Select.Option>
+            <Select.Option value="sa"><FormattedMessage id="Saturday" /></Select.Option>
+            <Select.Option value="su"><FormattedMessage id="Sunday" /></Select.Option>
           </Select>
           <Select
             defaultValue={time}
@@ -991,23 +1015,21 @@ class Map extends React.Component<PageProps, {}> {
               style={{
                 width: "50%",
               }} 
-              value="activity">Activity / Activité</Radio.Button>
+              value="activity"><FormattedMessage id="Activity" /></Radio.Button>
             <Radio.Button 
               style={{
                 width: "50%",
-              }}  value="maxStay">Max Stay / Durée max</Radio.Button>
+              }}  value="maxStay"><FormattedMessage id="Maxstay" /></Radio.Button>
           </Radio.Group>
           {mode === "maxStay" ? (
             <Pie
               animate={false}
               colors={Object.values(MAXSTAY_COLOR_MAP)}
               hasLegend
-              title="Maximum Stay"
+              title={<FormattedMessage id="Maxstay" />}
               subTitle={
                 <>
-                  Total car
-                  <br />
-                  lengths
+                  <FormattedMessage id="Totalcarlenghts" />
                 </>
               }
               total={() => (
@@ -1032,7 +1054,7 @@ class Map extends React.Component<PageProps, {}> {
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}{" "}
-                  cars
+                  <FormattedMessage id="cars" />
                 </span>
               )}
               height={240}
@@ -1045,9 +1067,7 @@ class Map extends React.Component<PageProps, {}> {
               title="Activities"
               subTitle={
                 <>
-                  Total car
-                  <br />
-                  lengths
+                  <FormattedMessage id="Totalcarlenghts" />
                 </>
               }
               total={() => (
@@ -1072,7 +1092,7 @@ class Map extends React.Component<PageProps, {}> {
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}{" "}
-                  cars
+                  <FormattedMessage id="cars" />
                 </span>
               )}
               height={240}
@@ -1086,40 +1106,58 @@ class Map extends React.Component<PageProps, {}> {
             href={curblrDataUri}
             download="export.curblr.json"
           >
-            Download CurbLR data
+            <FormattedMessage id="Download_curblr_data" />
           </Button>
           <br />
           <br />
           <p style={{ "fontSize": "11px" }}>
-            Données de stationnements {" "}
             <a href="https://donnees.montreal.ca/ville-de-montreal/stationnement-sur-rue-signalisation-courant">
-              {" "}
-              de Montréal{" "}
+              <FormattedMessage id="donnees_stationnement_montreal" />
             </a>
           </p>
-          <p  style={{ "fontSize": "11px" }}><a href="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link">Donnez-nous votre avis / Guive your feedback</a></p>
+          <p  style={{ "fontSize": "11px" }}><a href={getLocale() === 'en-US' ? "https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link" : "https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?usp=sf_link"}><FormattedMessage id="DONNEZ_NOUS_VOTRE_AVIS" /></a></p>
         </Card>
     
         {this.state.showFeedBackPopup && <Card
           size="small"
           title={
-          <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.setState({showFeedBackPopup: false})}>
-            <p>Donnez-nous votre avis / Guive us your feedback</p>
+          <div style={{ display: "flex", cursor: "pointer", justifyContent: "flex-end"}} onClick={() => this.setState({showFeedBackPopup: false})}>
             <div ><AiOutlineClose /></div>
           </div>}
-          bordered={true}
+          bordered={false}
           style={{
             position: "fixed",
             left: isMobile ? "0" : "45%",
-            top: "40px",
+            top: isMobile ? "75px": "10px",
             width: isMobile ? "100%" : "400px",
             height: "800px",
             maxHeight: "100vh",
             overflow: "auto",
           }}
         >
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>
+          {getLocale() === 'en-US' ? 
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?embedded=true" width="380" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe> :
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>}
         </Card>}
+
+        <Card
+          size="small"
+          title=""
+          bordered={true}
+          style={{
+            position: "fixed",
+            right: "10px",
+            top: "10px",
+            height: "60px",
+            overflow: "auto",
+            backgroundColor: "transparent",
+            border: "none",
+            display: "flex", 
+            cursor: "pointer" 
+          }}
+        >
+        <Button type={getLocale() === 'en-US' ? "primary" : "default"} style={{marginRight: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('en-US')}}>EN</Button><Button style={{marginLeft: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('fr-FR')}}>FR</Button>
+        </Card>
 
         <Button
           size="small"
@@ -1131,7 +1169,7 @@ class Map extends React.Component<PageProps, {}> {
             right: "40px",
           }}
         >
-          Plus d'informations sur la carte ici
+          <FormattedMessage id="More_information_about_the_card" />
         </Button>
 
       </Layout>
