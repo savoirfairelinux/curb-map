@@ -102,7 +102,7 @@ let geojson = {
         on_street: true
       }
     },
-    image: 'https://svgshare.com/i/ZM1.svg'
+    image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
     id: 4,
@@ -120,7 +120,7 @@ let geojson = {
         on_street: true
       }
     },
-    image: 'https://svgshare.com/i/ZM1.svg'
+    image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
     id: 5,
@@ -138,7 +138,7 @@ let geojson = {
         on_street: true
       }
     },
-    image: 'https://svgshare.com/i/ZM1.svg'
+    image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
     id: 5,
@@ -156,7 +156,7 @@ let geojson = {
         on_street: true
       }
     },
-    image: 'https://svgshare.com/i/ZM1.svg'
+    image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
     id: 5,
@@ -174,7 +174,7 @@ let geojson = {
         on_street: true
       }
     },
-    image: 'https://svgshare.com/i/ZM1.svg'
+    image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
   },
   {
     id: 5,
