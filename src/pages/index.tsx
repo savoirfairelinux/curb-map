@@ -263,13 +263,6 @@ class Map extends React.Component<PageProps, {}> {
     viewport: {
       width: "100vw",
       height: "100vh",
-      // needs update? default viewport is hard-coded and should dynamically set based on data. PHL viewport:
-      //        latitude:  39.950,
-      //        longitude:-75.174, //-71.20566699900684,46.81214413176751 - QUEBEC
-      //        zoom: 16
-      // PDX viewport 
-      // latitude: 46.81214413176751,
-      // longitude: -71.20566699900684,
       latitude: 45.5375724,
       longitude: -73.6066974,
       zoom: 16  
@@ -280,17 +273,8 @@ class Map extends React.Component<PageProps, {}> {
     data_to_replace: new CurbFeatureCollection(),
     old_VS_new_selector: false,
     mapclicked: false,
-    clickedLong: -73.62756337356329,//sfl
+    clickedLong: -73.62756337356329,
     clickedLat: 45.533970387611184,
-    // description: {
-    //   assetType: null,
-    //   sideOfStreet: null,
-    //   streetName: null,
-    //   Fee: null,
-    //   maxStay: null,
-    //   timeSpansDates: null,
-    //   timeSpansDays: null
-    // }
     description: "",
     b_noBorne: "XXX",
     b_periodes: "",
@@ -446,13 +430,8 @@ class Map extends React.Component<PageProps, {}> {
 
     for (const i in FeatureCollection.features) {
         const thisFeature = FeatureCollection.features[i];
-        // console.log(i)
-        // if (!this.isPointFeature(thisFeature)) { //TODO:
-        //     continue;
-        // }
-
         const lng2 = thisFeature.geometry.coordinates[0][0];
-        const lat2 = thisFeature.geometry.coordinates[0][1];//TODO: gerer le cas des features differents du Point
+        const lat2 = thisFeature.geometry.coordinates[0][1];
         const placeMeta = thisFeature;
         const radLat2 = Math.PI * lat2 / 180;
         const theta = lng1 - lng2;
@@ -481,39 +460,6 @@ class Map extends React.Component<PageProps, {}> {
         showFeedBackPopup: true
       })
     }, 5000)
-
-
-    // if (map) {
-    //   // TODO doesn't fire due to overlays div
-    //   map.on("mouseover", "dataLayer", function(e) {
-    //     console.log({ e });
-    //     var coordinates = e.features[0].geometry.coordinates.slice();
-    //     console.log("coucou: ", coordinates);
-        
-    //     // Ensure that if the map is zoomed out such that multiple
-    //     // copies of the feature are visible, the popup appears
-    //     // over the copy being pointed to.
-    //     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-    //       coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
-    //     }
-    //     // TODO needs work
-    //     // new mapboxgl.Popup()
-    //     // .setLngLat(coordinates)
-    //     // .setHTML(description)
-    //     // .addTo(map);
-    //   });
-      
-    // }
-    // if (map) {
-    //   map.on('pointermove', function(event) {
-
-    //   });
-      
-    //   map.getViewport().addEventListener('mouseout', function(evt){
-    //       console.info('out');
-    //   }, false);
-    // }else
-    // {console.log("map is null", map)}
 
     window.onresize = () => {
       const { viewport } = this.state;
@@ -572,9 +518,6 @@ class Map extends React.Component<PageProps, {}> {
     // this.state.old_VS_new_selector = false;//SetState
     this.setState({old_VS_new_selector: false});
     await this.props.dispatch(curblrActions.fetchGeoData(value));
-    console.log('day changeGeoData', this.state.day)
-    console.log('time changeGeoData', this.state.time)
-    console.log('mode changeGeoData', this.state.mode)
 
     var data = renderCurblrData(
       this.props.curblr.data,
@@ -620,12 +563,7 @@ class Map extends React.Component<PageProps, {}> {
   };
 
   sendRequest = async () =>{
-    // this.state.old_VS_new_selector = true;//While waiting for response(promise), this creates disparition of data in the card
-    // this.setState({old_VS_new_selector: true});// 
-    // let uri = "http://127.0.0.1:8081/"; //when local machine
     let uri = "http://143.198.46.93:8000"; //when remote
-    // let uri = "https://143.198.46.93/"; //when remote with ssl
-
 
     const payload = {
       "true_date_time": this.state.set_dateTimeRef,
@@ -633,15 +571,10 @@ class Map extends React.Component<PageProps, {}> {
       "price": 3,
       "minStay": 32
     }
-    console.log(payload)
-    //TODO: await
+    
     await axios.post(uri, payload)
       .then((response) => {
-        console.log("response: ",response);
-        console.log("response data: ", response.data);
-      
       this.setState({data_to_replace:response.data});
-      // this.state.data_to_replace = response.data;//setState
       this.changeGeoDataFromPost(response.data);
       }, (error) => {
         console.log(error);
@@ -903,44 +836,6 @@ class Map extends React.Component<PageProps, {}> {
         y: MAXSTAY_LENGTH_CALC["240"]
       }
     ];
-   
-    const arrondissements_montreal = [
-      { label: "plaza", value: "plaza"},
-      { label: "Outremont", value: "Outremont"},
-      // { label: "LaSalle", value: "LaSalle"},
-      // { label: "Mont-Royal", value: "Mont-Royal"},
-      // { label: "Ville-Marie", value: "Ville-Marie"},//weird
-      { label: "Le Plateau-Mont-Royal", value: "Le Plateau-Mont-Royal"},
-      // { label: "Hampstead", value: "Hampstead"},
-      { label: "Le Sud-Ouest", value: "Le Sud-Ouest"},
-      // { label: "Rivière-des-Prairies-Pointe-aux-Trembles", value: "Rivière-des-Prairies-Pointe-aux-Trembles"},
-      { label: "Lachine", value: "Lachine"},
-      // { label: "Dorval", value: "Dorval"},
-      // { label: "Montréal-Nord", value: "Montréal-Nord"},
-      // { label: "L'Île-Bizard-Sainte-Geneviève", value: "L'Île-Bizard-Sainte-Geneviève"},
-      // { label: "Kirkland", value: "Kirkland"},
-      // { label: "Dollard-des-Ormeaux", value: "Dollard-des-Ormeaux"},
-      // { label: "Senneville", value: "Senneville"},
-      { label: "Ahuntsic-Cartierville", value: "Ahuntsic-Cartierville"},
-      // { label: "Côte-Saint-Luc", value: "Côte-Saint-Luc"},
-      // { label: "Saint-Léonard", value: "Saint-Léonard"},
-      // { label: "Montréal-Ouest", value: "Montréal-Ouest"},
-      // { label: "Pointe-Claire", value: "Pointe-Claire"},
-      // { label: "L'Île-Dorval", value: "L'Île-Dorval"},
-      { label: "Mercier-Hochelaga-Maisonneuve", value: "Mercier-Hochelaga-Maisonneuve"},
-      { label: "Côte-des-Neiges-Notre-Dame-de-Grâce", value: "Côte-des-Neiges-Notre-Dame-de-Grâce"},
-      { label: "Rosemont-La Petite-Patrie", value: "Rosemont-La Petite-Patrie"},
-      { label: "Saint-Laurent", value: "Saint-Laurent"},
-      // { label: "Beaconsfield", value: "Beaconsfield"},
-      { label: "Villeray-Saint-Michel-Parc-Extension", value: "Villeray-Saint-Michel-Parc-Extension"},
-      // { label: "Westmount", value: "Westmount"},
-      // { label: "Montréal-Est", value: "Montréal-Est"},
-      // { label: "Anjou", value: "Anjou"},
-      // { label: "Pierrefonds-Roxboro", value: "Pierrefonds-Roxboro"},
-      // { label: "Sainte-Anne-de-Bellevue", value: "Sainte-Anne-de-Bellevue"},
-      { label: "Verdun", value: "Verdun"},
-      // { label: "Baie-d'Urfé", value: "Baie-d'Urfé"},
-    ];
  
     return (
       <Layout>  
@@ -958,17 +853,11 @@ class Map extends React.Component<PageProps, {}> {
             longitude={clickedLong}
             closeButton={true}
             closeOnClick={false}
-            // onClose={() => togglePopup(false)}
             anchor="top" >
-            {/* <div>{description}</div> */}
-            {/* <div>Borne: {b_noBorne}</div> */}
             <div>Rue: {b_nomRue}</div>
             <br />
             <div>Tarif horaire: {b_tarif} dollars</div>
-            <br />
-            {/* <div>Périodes tarifées: </div>
-            <div>{b_periodes}</div> */}
-            
+            <br />            
           </Popup>
 
           {this.markers}
@@ -1008,7 +897,7 @@ class Map extends React.Component<PageProps, {}> {
         <Card
           size="small"
           title={
-            <div style={{ display: "flex", cursor: "pointer"}} onClick={() => this.hideComponent("showHideCard")}>
+            <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.hideComponent("showHideCard")}>
               <p>Stationnements Plaza Saint-Hubert</p>
               <div style={{ marginLeft: "1rem", }} > {showHideCard ? <AiFillCaretDown /> : <AiFillCaretUp />}</div>
             </div>
@@ -1029,10 +918,8 @@ class Map extends React.Component<PageProps, {}> {
           <Select
             onChange={this.changeGeoData}
             style={{
-              // position: "fixed",
-              // top: "40px",
-              // left: "40px",
-              width: "275px",
+              margin: "0.1rem",
+              width: "100%",
             }}
           >
             {React.Children.toArray(
@@ -1041,9 +928,14 @@ class Map extends React.Component<PageProps, {}> {
               ))
             )}
           </Select>
-          <br />
-          <br />
-          <Select defaultValue={day} onChange={this.changeDay}>
+          <Select 
+            defaultValue={day} 
+            onChange={this.changeDay}
+            style={{
+              margin: "0.05rem",
+              width: isMobile ? "100%" : "49.5%",
+            }}
+          >
             <Select.Option value="mo">Monday / Lundi</Select.Option>
             <Select.Option value="tu">Tuesday / Mardi</Select.Option>
             <Select.Option value="we">Wednesday / Mercredi</Select.Option>
@@ -1056,10 +948,8 @@ class Map extends React.Component<PageProps, {}> {
             defaultValue={time}
             onChange={this.changeTime}
             style={{
-              // position: "fixed",
-              // top: "40px",
-              // left: "40px",
-              width: "85px",
+              margin: "0.05rem",
+              width: isMobile ? "100%" : "49.5% ",
             }}
           >
             <Select.Option value="00:01">00:00</Select.Option>
@@ -1087,19 +977,26 @@ class Map extends React.Component<PageProps, {}> {
             <Select.Option value="22:01">22:00</Select.Option>
             <Select.Option value="23:01">23:00</Select.Option>
           </Select>
-          <br />
-          <br />
           <Radio.Group
             defaultValue={mode}
             buttonStyle="solid"
-            position="center"
             onChange={this.changeMode}
+            style={{
+              marginTop: "1rem",
+              marginBottom: "1rem",
+              width: "100%",
+            }}
           >
-            <Radio.Button value="activity">Activity / Activité</Radio.Button>
-            <Radio.Button value="maxStay">Max Stay / Durée max</Radio.Button>
+            <Radio.Button 
+              style={{
+                width: "50%",
+              }} 
+              value="activity">Activity / Activité</Radio.Button>
+            <Radio.Button 
+              style={{
+                width: "50%",
+              }}  value="maxStay">Max Stay / Durée max</Radio.Button>
           </Radio.Group>
-          <br />
-          <br />
           {mode === "maxStay" ? (
             <Pie
               animate={false}
