@@ -483,6 +483,13 @@ class Map extends React.Component<PageProps, {}> {
         }
       });
     };
+
+    // Hack to fix slow map
+    setTimeout(() => {
+      this.changeGeoData(geoDataFiles[1]["path"]);
+      this.changeGeoData(geoDataFiles[0]["path"]);
+    }, 2000)
+
   }
 
   componentWillUnmount() {
@@ -526,6 +533,11 @@ class Map extends React.Component<PageProps, {}> {
   };
 
   changeGeoData = async (value) => {
+
+    if(value == geoDataFiles[1]["path"])
+      this.setState( { paid: true})
+    else
+      this.setState( { paid: false})
 
     // this.state.old_VS_new_selector = false;//SetState
     this.setState({old_VS_new_selector: false});
@@ -689,7 +701,9 @@ class Map extends React.Component<PageProps, {}> {
             b_noBorne,
             b_periodes,
             b_tarif,
-            b_nomRue
+            b_nomRue,
+            paid,
+            displayPricePopup
           } = this.state;
 
   // shows everything. would be great if this could intersect the feature collection with the viewport bounding box. i can't figure it out. for kevin?
@@ -779,6 +793,20 @@ class Map extends React.Component<PageProps, {}> {
       {
         x: formatMessage(
           {
+            id: 'Stationnement_gratuit',
+          }),
+        y: ACTIVITY_LENGTH_CALC["free parking"]
+      },
+      {
+        x: formatMessage(
+          {
+            id: 'Stationnement_payant',
+          }),
+        y: ACTIVITY_LENGTH_CALC["paid parking"]
+      },
+      {
+        x: formatMessage(
+          {
             id: 'Arret_interdit',
           }),
         y: ACTIVITY_LENGTH_CALC["no standing"]
@@ -804,27 +832,13 @@ class Map extends React.Component<PageProps, {}> {
           }),
         y: ACTIVITY_LENGTH_CALC["loading"]
       },
-      {
-        x: formatMessage(
-          {
-            id: 'Transit',
-          }),
-        y: ACTIVITY_LENGTH_CALC["transit"]
-      },
-      {
-        x: formatMessage(
-          {
-            id: 'Stationnement_gratuit',
-          }),
-        y: ACTIVITY_LENGTH_CALC["free parking"]
-      },
-      {
-        x: formatMessage(
-          {
-            id: 'Stationnement_payant',
-          }),
-        y: ACTIVITY_LENGTH_CALC["paid parking"]
-      },
+      // {
+      //   x: formatMessage(
+      //     {
+      //       id: 'Transit',
+      //     }),
+      //   y: ACTIVITY_LENGTH_CALC["transit"]
+      // },
       {
         x: formatMessage(
           {
@@ -882,19 +896,21 @@ class Map extends React.Component<PageProps, {}> {
             mapStyle={mapStyle}
             {...viewport}
             onViewportChange={(viewport) => this.setState({ viewport })}
-            onClick={(evt) => this.onClickMap(evt)}
+            onClick={(evt) => {this.onClickMap(evt); this.setState({displayPricePopup: true})}}
           >
+          {this.state.paid && this.state.displayPricePopup &&
           <Popup
             latitude={clickedLat}
             longitude={clickedLong}
             closeButton={true}
-            closeOnClick={false}
+            closeOnClick={true}
+            onClose={() => this.setState({displayPricePopup: false})}
             anchor="top" >
             <div>Rue: {b_nomRue}</div>
             <br />
             <div><FormattedMessage id="Tarif_horaire" />: {b_tarif} dollars</div>
             <br />            
-          </Popup>
+          </Popup>}
 
           {this.markers}
           </MapGL>
@@ -954,6 +970,7 @@ class Map extends React.Component<PageProps, {}> {
           
           <div><FormattedMessage id="DONNEES_A_AFFICHER"/></div>
           <Select
+            defaultValue={geoDataFiles[0]["path"]} 
             onChange={this.changeGeoData}
             style={{
               margin: "0.1rem",
@@ -1068,7 +1085,7 @@ class Map extends React.Component<PageProps, {}> {
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}{" "}
-                  <FormattedMessage id="cars" />
+                  <FormattedMessage id="places" />
                 </span>
               )}
               height={240}
@@ -1107,12 +1124,23 @@ class Map extends React.Component<PageProps, {}> {
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
                   })}{" "}
-                  <FormattedMessage id="cars" />
+                  <FormattedMessage id="places" />
                 </span>
               )}
               height={240}
             />
           )}
+          <br />
+          <Button
+            type="default"
+            icon="plus"
+            block
+            href={getLocale() === 'en-US' ? "https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link" : "https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?usp=sf_link"}
+            download="export.curblr.json"
+          >
+            <FormattedMessage id="DONNEZ_NOUS_VOTRE_AVIS" />
+          </Button>
+          <br />
           <br />
           <Button
             type="primary"
@@ -1129,8 +1157,7 @@ class Map extends React.Component<PageProps, {}> {
             <a href="https://donnees.montreal.ca/ville-de-montreal/stationnement-sur-rue-signalisation-courant">
               <FormattedMessage id="donnees_stationnement_montreal" />
             </a>
-          </p>
-          <p  style={{ "fontSize": "11px" }}><a href={getLocale() === 'en-US' ? "https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link" : "https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?usp=sf_link"}><FormattedMessage id="DONNEZ_NOUS_VOTRE_AVIS" /></a></p>
+          </p>          
         </Card>
     
         {this.state.showFeedBackPopup && <Card

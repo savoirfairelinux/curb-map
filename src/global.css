@@ -7,3 +7,22 @@ html, body, #root {
 body {
   margin: 0;
 }
+
+
+/* 
+    Pie chart customization 
+    for Plaza Saint-Hubert 
+*/
+
+.antd-pro-charts-pie-pie .antd-pro-charts-pie-percent {
+  display: none;
+}
+
+.ant-divider-vertical {
+  display: none;
+}
+
+.antd-pro-charts-pie-legendBlock.antd-pro-charts-pie-hasLegend .antd-pro-charts-pie-chart {
+  width: 100%;
+  margin: 0 0 0 0;
+}

@@ -19,8 +19,8 @@ console.error = (...args : any[]) => {
 };
 
 const geoDataFiles = [
-    { path: "mtl-fusion-plaza.curblr.json", label: "Stationnement"},
-    { path: "mtl-subset-segment-plaza.curblr.json", label: "Public"},
+    // { path: "mtl-fusion-plaza.curblr.json", label: "Stationnement"}, //TODO: Improve performance, when changing hour filter the app stops working
+    { path: "mtl-subset-segment-plaza.curblr.json", label: "Public (Avec/Sans vignette)"},
     { path: "mtl-parco-plaza.curblr.json", label: "Payant"},
 ];
 

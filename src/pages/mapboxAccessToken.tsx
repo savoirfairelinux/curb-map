@@ -58,13 +58,13 @@ export const MAXSTAY_COLOR_MAP: { [key: string]: any; } = {
 //     "240": "#124116",
 // }
 export const ACTIVITY_COLOR_MAP = {
+  "free parking": "#00E5FF",
+  "paid parking": "#2979FF",
   "no standing": "#777777",
   "no parking": "#DD2C00",
   "passenger loading": "#FF9100",
   "loading": "#FFEA00",
-  "transit": "#37B34A",
-  "free parking": "#00E5FF",
-  "paid parking": "#2979FF",
+  // "transit": "#37B34A",
   "restricted": "#AA00FF"
 };
 const scaledWidth = (width: number) => {
