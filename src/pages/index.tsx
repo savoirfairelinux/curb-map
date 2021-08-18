@@ -1145,7 +1145,6 @@ class Map extends React.Component<PageProps, {}> {
             icon="plus"
             block
             href={getLocale() === 'en-US' ? "https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?usp=sf_link" : "https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?usp=sf_link"}
-            download="export.curblr.json"
           >
             <FormattedMessage id="DONNEZ_NOUS_VOTRE_AVIS" />
           </Button>
@@ -1162,6 +1161,23 @@ class Map extends React.Component<PageProps, {}> {
           </Button>
           <br />
           <br />
+          {isMobile && <Button
+            type="default"
+            icon="plus"
+            block
+          >
+            <Link to="/consent"><FormattedMessage id="cgu_link" /></Link>
+          </Button>}
+          <br />
+          <br />
+          {isMobile && <Button
+            type="default"
+            href="https://wiki.lafabriquedesmobilites.fr/wiki/Carte_CurbLR_de_Montr%C3%A9al"
+            icon="plus"
+            block
+          >
+            <FormattedMessage id="More_information_about_the_card" />
+          </Button>}
           <p style={{ "fontSize": "11px" }}>
             <a href="https://donnees.montreal.ca/ville-de-montreal/stationnement-sur-rue-signalisation-courant">
               <FormattedMessage id="donnees_stationnement_montreal" />
@@ -1252,7 +1268,7 @@ class Map extends React.Component<PageProps, {}> {
           <FormattedMessage id='cookie_consent_text'/>{" "}
           <span style={{ fontSize: "10px" }}><Link to="/consent"><FormattedMessage id="cookie_consent_read_more" /></Link></span>
         </CookieConsent>
-        <Button
+        {!isMobile && <Button
           size="small"
           type="primary"
           style={{
@@ -1262,8 +1278,8 @@ class Map extends React.Component<PageProps, {}> {
           }}
         >
           <Link to="/consent"><FormattedMessage id="cgu_link" /></Link>
-        </Button>
-        <Button
+        </Button>}
+        {!isMobile && <Button
           size="small"
           type="primary"
           href="https://wiki.lafabriquedesmobilites.fr/wiki/Carte_CurbLR_de_Montr%C3%A9al"
@@ -1274,7 +1290,7 @@ class Map extends React.Component<PageProps, {}> {
           }}
         >
           <FormattedMessage id="More_information_about_the_card" />
-        </Button>
+        </Button>}
 
       </Layout>
     );

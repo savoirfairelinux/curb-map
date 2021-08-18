@@ -4,6 +4,8 @@ import { Button, Card, Descriptions, Icon, Layout, Radio, Select } from "antd";
 import { formatMessage, setLocale, getLocale, FormattedMessage } from 'umi-plugin-locale';
 import CookieConsent, { Cookies } from "react-cookie-consent";
 import { Link } from 'umi';
+import {isMobile} from 'react-device-detect';
+
 
 export default class extends React.Component {
 
@@ -22,10 +24,10 @@ export default class extends React.Component {
       <div style= {{ display: "flex", 
                 flexDirection: "column", 
                 alignContent: "center", 
-                marginLeft: "10rem", 
-                marginRight: "10rem",
-                marginTop: "5rem",
-                marginBottom: "5rem"
+                marginLeft: isMobile ? "1rem" : "10rem", 
+                marginRight: isMobile ? "1rem" : "10rem",
+                marginTop: isMobile ? "1rem" : "5rem",
+                marginBottom: isMobile ? "1rem" : "5rem"
             }}>
         <Button size="small" type="primary" style={{ width: "12rem"}}><Link to="/index"><FormattedMessage id="return_to_map" /></Link></Button>
         <h1></h1>
