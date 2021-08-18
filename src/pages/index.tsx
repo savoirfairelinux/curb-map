@@ -802,14 +802,14 @@ class Map extends React.Component<PageProps, {}> {
       {
         x: formatMessage(
           {
-            id: 'Stationnement_gratuit',
+            id: isMobile ? 'Stationnement_gratuit_mobile' : 'Stationnement_gratuit',
           }),
         y: ACTIVITY_LENGTH_CALC["free parking"]
       },
       {
         x: formatMessage(
           {
-            id: 'Stationnement_payant',
+            id: isMobile ? 'Stationnement_payant_mobile' : 'Stationnement_payant',
           }),
         y: ACTIVITY_LENGTH_CALC["paid parking"]
       },
@@ -823,7 +823,7 @@ class Map extends React.Component<PageProps, {}> {
       {
         x: formatMessage(
           {
-            id: 'Stationnement_interdit',
+            id: isMobile ? 'Stationnement_interdit_mobile' : 'Stationnement_interdit',
           }),
         y: ACTIVITY_LENGTH_CALC["no parking"]
       },
@@ -1069,7 +1069,7 @@ class Map extends React.Component<PageProps, {}> {
               title={<FormattedMessage id="Maxstay" />}
               subTitle={
                 <>
-                  <FormattedMessage id="Totalcarlenghts" />
+                  {isMobile ? <FormattedMessage id="Totalcarlenghts_mobile" /> : <FormattedMessage id="Totalcarlenghts" />}
                 </>
               }
               total={() => (
@@ -1107,7 +1107,7 @@ class Map extends React.Component<PageProps, {}> {
               title="Activities"
               subTitle={
                 <>
-                  <FormattedMessage id="Totalcarlenghts" />
+                  {isMobile ? <FormattedMessage id="Totalcarlenghts_mobile" /> : <FormattedMessage id="Totalcarlenghts" />}
                 </>
               }
               total={() => (
