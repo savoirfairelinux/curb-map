@@ -14,6 +14,7 @@
     "@types/react-map-gl": "^5.0.0",
     "ant-design-pro": "^2.3.2",
     "antd": "^3.19.5",
+    "antd-mobile": "^2.3.4",
     "axios": "^0.21.1",
     "dva": "^2.6.0-beta.6",
     "dva-model-creator": "^0.4.2",
@@ -25,12 +26,14 @@
     "ol": "^6.5.0",
     "package.json": "^2.0.1",
     "react": "^16.8.6",
+    "react-cookie-consent": "^6.3.0",
     "react-datetime-picker": "^3.2.0",
     "react-device-detect": "^1.17.0",
     "react-dom": "^16.8.6",
     "react-icons": "^4.2.0",
     "react-map-gl": "^5.0.10",
     "react-map-gl-geocoder": "^2.1.6",
+    "react-sticky": "^6.0.3",
     "umi-plugin-ga": "^1.1.8"
   },
   "devDependencies": {

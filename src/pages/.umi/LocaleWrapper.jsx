@@ -34,7 +34,7 @@ defaultAntd = defaultAntd.default || defaultAntd;
 const localeInfo = {
   'en-US': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/larbizard/Documents/SFL/fabmob/curb-map/src/locales/en-US.ts')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/lgharib/Documents/SFL/fabmob/fabmob/Curblr/curb-map/src/locales/en-US.ts')),
     },
     locale: 'en-US',
     antd: require('antd/es/locale-provider/en_US'),
@@ -43,7 +43,7 @@ const localeInfo = {
   },
   'fr-FR': {
     messages: {
-      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/larbizard/Documents/SFL/fabmob/curb-map/src/locales/fr-FR.ts')),
+      ...((locale) => locale.__esModule ? locale.default : locale)(require('/home/lgharib/Documents/SFL/fabmob/fabmob/Curblr/curb-map/src/locales/fr-FR.ts')),
     },
     locale: 'fr-FR',
     antd: require('antd/es/locale-provider/fr_FR'),

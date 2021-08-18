@@ -19,10 +19,12 @@ import {
   geolocateStyle, ICON, mapboxAccessToken, mapStateToProps, MAXSTAY_COLOR_MAP, navStyle, PageProps, renderCurblrData, scaleControlStyle, SIZE
 } from "./mapboxAccessToken";
 import Geometry from 'ol/geom/Geometry';
-import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose } from "react-icons/ai";
+import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose, AiFillWarning } from "react-icons/ai";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import {isMobile} from 'react-device-detect';
 import { formatMessage, setLocale, getLocale, FormattedMessage } from 'umi-plugin-locale';
+import CookieConsent, { Cookies } from "react-cookie-consent";
+import { Link } from 'umi';
 
 /**
  * Sources:
@@ -43,7 +45,7 @@ let geojson = {
         type: 'communauto',
         description: '',
         address: 'St-André et Bélanger',
-        count: 100,
+        count: 1,
         price_per_hour: 1,
         on_street: false
       }
@@ -295,7 +297,8 @@ class Map extends React.Component<PageProps, {}> {
     b_nomRue: "XXX",
     showPopup: false,
     selectedMarker: {},
-    showFeedBackPopup: false
+    showFeedBackPopup: false,
+    showEventAlert: false
   };
   
   constructor(props: any) {
@@ -470,6 +473,12 @@ class Map extends React.Component<PageProps, {}> {
     setTimeout(() => {
       this.setState({
         showFeedBackPopup: true
+      })
+    }, 20000)
+
+    setTimeout(() => {
+      this.setState({
+        showEventAlert: true
       })
     }, 5000)
 
@@ -940,10 +949,10 @@ class Map extends React.Component<PageProps, {}> {
           }}
         ><div>
           <p>{this.state.selectedMarker.geometry.properties.description}</p>
-          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png" width="25px" /> {this.state.selectedMarker.geometry.properties.count} places</p>
-          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/MUTCD_D9-6.svg/1024px-MUTCD_D9-6.svg.png" width="25px"/> {this.state.selectedMarker.geometry.properties.handicapped_count} <FormattedMessage id="handicapped_places" /></p>
-          <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>
-          <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>
+          { this.state.selectedMarker.geometry.properties.type !== 'communauto' && <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png" width="25px" style={{ marginRight: "10px"}} /> {this.state.selectedMarker.geometry.properties.count} <FormattedMessage id="places" /></p>}
+          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/MUTCD_D9-6.svg/1024px-MUTCD_D9-6.svg.png" width="25px" style={{ marginRight: "10px"}}/> {this.state.selectedMarker.geometry.properties.handicapped_count} <FormattedMessage id="handicapped_places" /></p>}
+          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>}
+          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>}
           <p>{this.state.selectedMarker.geometry.properties.address}</p>
         </div></Card>}
 
@@ -1157,7 +1166,7 @@ class Map extends React.Component<PageProps, {}> {
             <a href="https://donnees.montreal.ca/ville-de-montreal/stationnement-sur-rue-signalisation-courant">
               <FormattedMessage id="donnees_stationnement_montreal" />
             </a>
-          </p>          
+          </p>
         </Card>
     
         {this.state.showFeedBackPopup && <Card
@@ -1169,7 +1178,7 @@ class Map extends React.Component<PageProps, {}> {
           bordered={false}
           style={{
             position: "fixed",
-            left: isMobile ? "0" : "45%",
+            left: isMobile ? "0" : "41%",
             top: isMobile ? "75px": "10px",
             width: isMobile ? "100%" : "400px",
             height: "800px",
@@ -1180,6 +1189,37 @@ class Map extends React.Component<PageProps, {}> {
           {getLocale() === 'en-US' ? 
           <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?embedded=true" width="380" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe> :
           <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>}
+        </Card>}
+
+        {this.state.showEventAlert && <Card
+          size="small"
+          title={
+          <div style={{ display: "flex", cursor: "pointer", justifyContent: "space-between"}} onClick={() => this.setState({showEventAlert: false})}>
+            <div><AiFillWarning /></div>
+            <div><FormattedMessage id="event_alert_title"/></div>
+            <div><AiOutlineClose /></div>
+          </div>}
+          bordered={false}
+          style={{
+            position: "fixed",
+            left: isMobile ? "0" : "40%",
+            top: isMobile ? "75px": "10px",
+            width: isMobile ? "100%" : "450px",
+            height: "300px",
+            maxHeight: "100vh",
+            overflow: "auto",
+            color: "white",
+            backgroundColor: "#E76A4C"
+          }}
+        >
+          <div>
+            <h3><FormattedMessage id='event_alert_subtitle' /></h3>
+            <h3><FormattedMessage id='event_alert_subtitle2' /></h3>
+            <ul>
+              <li><FormattedMessage id='event_alert_title_list_element_1' /></li>
+              <li><FormattedMessage id='event_alert_title_list_element_2' /></li>
+            </ul>
+          </div>
         </Card>}
 
         <Card
@@ -1201,6 +1241,28 @@ class Map extends React.Component<PageProps, {}> {
         <Button type={getLocale() === 'en-US' ? "primary" : "default"} style={{marginRight: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('en-US')}}>EN</Button><Button type={getLocale() === 'fr-FR' ? "primary" : "default"} style={{marginLeft: "0.1rem"}} onClick={(e) => {e.preventDefault(); setLocale('fr-FR')}}>FR</Button>
         </Card>
 
+        <CookieConsent
+          location="bottom"
+          buttonText={<FormattedMessage id='i_consent' />}
+          cookieName="cookieConsent"
+          style={{ backgroundColor: "#000000", color: "#ffffff" }}
+          buttonStyle={{ color: "#4e503b", fontSize: "13px" }}
+          expires={150}
+        >
+          <FormattedMessage id='cookie_consent_text'/>{" "}
+          <span style={{ fontSize: "10px" }}><Link to="/consent"><FormattedMessage id="cookie_consent_read_more" /></Link></span>
+        </CookieConsent>
+        <Button
+          size="small"
+          type="primary"
+          style={{
+            position: "fixed",
+            bottom: "80px",
+            right: "40px",
+          }}
+        >
+          <Link to="/consent"><FormattedMessage id="cgu_link" /></Link>
+        </Button>
         <Button
           size="small"
           type="primary"
