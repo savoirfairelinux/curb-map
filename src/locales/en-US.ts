@@ -54,5 +54,6 @@ export default {
   'consent_p8': 'The data collected will be used to produce analyzes relating to the use of the interactive map and these analyzes will be shared with our partners. No personally identifiable information will be included in such analyzes or shared with our partners.',
   'consent_p9': 'To find out more about the city of Montreal\'s digital data charter',
   'consent_p10': 'To learn more about the experiment',
-  'consent_p11': 'cliquez ici'
+  'consent_p11': 'Click here',
+  'go_to_this_place': 'Go to this place'
 }

@@ -54,6 +54,7 @@ export default {
     'consent_p8': 'Les données recueillies seront utilisées afin de produire des analyses relatives à l\'utilisation de la carte interactive et ces analyses seront partagées avec nos partenaires. Aucune information permettant d\'identifier des individus ne sera incluse dans de telles analyses ou partagées avec nos partenaires.',
     'consent_p9': 'Pour en savoir plus sur la charte des données numériques de la ville de Montréal',
     'consent_p10': 'Pour en savoir plus sur l\'expérimentation',
-    'consent_p11': 'Cliquez ici'
+    'consent_p11': 'Cliquez ici',
+    'go_to_this_place': 'Aller vers ce lieu'
   }
   

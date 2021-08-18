@@ -19,7 +19,7 @@ import {
   geolocateStyle, ICON, mapboxAccessToken, mapStateToProps, MAXSTAY_COLOR_MAP, navStyle, PageProps, renderCurblrData, scaleControlStyle, SIZE
 } from "./mapboxAccessToken";
 import Geometry from 'ol/geom/Geometry';
-import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose, AiFillWarning } from "react-icons/ai";
+import { AiFillCaretUp, AiFillCaretDown, AiOutlineClose, AiFillWarning, AiOutlinePushpin } from "react-icons/ai";
 import mapboxgl, { LngLat } from "mapbox-gl";
 import {isMobile} from 'react-device-detect';
 import { formatMessage, setLocale, getLocale, FormattedMessage } from 'umi-plugin-locale';
@@ -954,6 +954,7 @@ class Map extends React.Component<PageProps, {}> {
           { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>}
           { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>}
           <p>{this.state.selectedMarker.geometry.properties.address}</p>
+          <p><a href={"https://www.google.com/maps/search/?api=1&query=" + this.state.selectedMarker.geometry.coordinates[1].toString() + "," + this.state.selectedMarker.geometry.coordinates[0].toString()} ><AiOutlinePushpin /> <FormattedMessage id="go_to_this_place" /></a></p>
         </div></Card>}
 
 
