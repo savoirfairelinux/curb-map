@@ -42,7 +42,7 @@ export default {
     'cookie_consent_read_more': 'Lire plus ...',
     'i_consent': 'J\'accepte',
     'return_to_map': 'Retourner vers la carte',
-    'cgu_link': 'Condition Générale d\'Utilisation',
+    'cgu_link': 'Conditions générales d\'utilisation',
     'consent_title': 'Déclaration relative à la collecte de données',
     'consent_p1': 'En accédant à cette carte vous acceptez qu\'un certain nombre d\'informations soient anonymement collectées. Dans le respect de la sobriété numérique énoncée dans la Charte des données numériques de la ville de Montréal, nous ne collecterons que les données minimales nécessaires à notre expérimentation. A savoir la zone géographique depuis laquelle vous vous connectez,  et le support de connexion que vous utilisez et l\'adresse IP associée à votre appareil à des fins de comptabilisation des visiteurs uniques. Nous collectons également sur une base anonyme et volontaire les réponses à un court sondage et les commentaires des utilisateurs.',
     'consent_p2': 'La collecte de données est effectuée par le biais de Google Analytics et Google Form. Les données collectées sont donc disponibles à Google.',

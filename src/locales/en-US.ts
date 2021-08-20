@@ -42,7 +42,7 @@ export default {
   'cookie_consent_read_more': 'Read more ...',
   'i_consent': 'I accept',
   'return_to_map': 'Return to map',
-  'cgu_link': 'General Conditions of Use',
+  'cgu_link': 'General conditions of use',
   'consent_title': 'Data collection statement',
   'consent_p1': 'By accessing this map, you agree that a certain amount of information will be collected anonymously. In accordance with the digital sobriety set out in the City of Montreal\'s Digital Data Charter, we will only collect the minimum data necessary for our experimentation. Namely the geographical area from which you are connecting, and the connection medium you use and the IP address associated with your device for the purpose of counting unique visitors. We also collect responses to a short survey and user comments on an anonymous and voluntary basis. ',
   'consent_p2': 'Data collection is carried out through Google Analytics and Google Form. The data collected is therefore available to Google.',
