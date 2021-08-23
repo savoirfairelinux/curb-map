@@ -476,11 +476,11 @@ class Map extends React.Component<PageProps, {}> {
       })
     }, 20000)
 
-    setTimeout(() => {
-      this.setState({
-        showEventAlert: true
-      })
-    }, 5000)
+    // setTimeout(() => {
+    //   this.setState({
+    //     showEventAlert: true
+    //   })
+    // }, 5000)
 
     window.onresize = () => {
       const { viewport } = this.state;
