@@ -29,7 +29,7 @@ import { Link } from 'umi';
 /**
  * Sources:
  * Bornes de recharge éléctrique https://lecircuitelectrique.com/fr/trouver-une-borne/
- * Bornes communato: https://montreal.communauto.com/fonctionnement/
+ * Bornes communauto: https://montreal.communauto.com/fonctionnement/
  */
 
 let geojson = {
@@ -45,9 +45,10 @@ let geojson = {
         type: 'communauto',
         description: '',
         address: 'St-André et Bélanger',
-        count: 1,
+        count: 0,
         price_per_hour: 1,
-        on_street: false
+        on_street: false,
+        img: './communauto_181.png'
       }
     },
     image: 'https://i.ibb.co/jMM1V13/commauto.png'
@@ -63,9 +64,10 @@ let geojson = {
         type: 'communauto',
         description: '',
         address: 'De Chateaubriand et Beaubien',
-        count: 100,
+        count: 6,
         price_per_hour: 1,
-        on_street: false
+        on_street: false,
+        img: './communauto_427.png'
       }
     },
     image: 'https://i.ibb.co/jMM1V13/commauto.png'
@@ -81,9 +83,10 @@ let geojson = {
         type: 'communauto',
         description: '',
         address: 'Boyer et St-Zotique',
-        count: 100,
+        count: 10,
         price_per_hour: 1,
-        on_street: false
+        on_street: false,
+        img: './communauto_034.png'
       }
     },
     image: 'https://i.ibb.co/jMM1V13/commauto.png'
@@ -101,7 +104,8 @@ let geojson = {
         address: '5808 St-Hubert Montréal QC H2S 2L7',
         count: 4,
         price_per_hour: 1,
-        on_street: true
+        on_street: true,
+        img: null
       }
     },
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
@@ -119,7 +123,8 @@ let geojson = {
         address: '6036 St-Hubert Montréal QC H2S 2L7',
         count: 2,
         price_per_hour: 1,
-        on_street: true
+        on_street: true,
+        img: null
       }
     },
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
@@ -137,7 +142,8 @@ let geojson = {
         address: '6511 Rue Saint-André Montréal QC H2S 2K7',
         count: 2,
         price_per_hour: 1,
-        on_street: true
+        on_street: true,
+        img: null
       }
     },
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
@@ -155,7 +161,8 @@ let geojson = {
         address: '6776 Boyer Montréal QC H2S 2J7',
         count: 2,
         price_per_hour: 1,
-        on_street: true
+        on_street: true,
+        img: null
       }
     },
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
@@ -173,7 +180,8 @@ let geojson = {
         address: '1031 Rue Saint-Zotique E Montréal QC H2S 1N1',
         count: 2,
         price_per_hour: 1,
-        on_street: true
+        on_street: true,
+        img: null
       }
     },
     image: 'https://i.ibb.co/dctXGTQ/Logo-Le-Circuit-lectrique.png'
@@ -189,12 +197,13 @@ let geojson = {
         type: 'normal',
         description: '',
         address: '',
-        count: 101,
+        count: 91,
         price_per_hour: 2.75,
         price_per_day: 12,
         handicapped_count: 1,
         regulation: '24 h/24',
-        on_street: false
+        on_street: false,
+        img: null
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -215,7 +224,8 @@ let geojson = {
         price_per_day: 12,
         handicapped_count: 2,
         regulation: '24 h/24',
-        on_street: false
+        on_street: false,
+        img: null
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -236,7 +246,8 @@ let geojson = {
         price_per_day: 12,
         handicapped_count: 0,
         regulation: '24 h/24',
-        on_street: false
+        on_street: false,
+        img: null
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -257,7 +268,8 @@ let geojson = {
         price_per_day: 14,
         handicapped_count: 3,
         regulation: '24 h/24',
-        on_street: false
+        on_street: false,
+        img: null
       }
     },
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png'
@@ -760,7 +772,16 @@ class Map extends React.Component<PageProps, {}> {
       "restricted": features.features
         .filter(f => f.properties.activity === "restricted")
         .map(f => f.properties.length)
-        .reduce((acc, x) => acc + x, 0)
+        .reduce((acc, x) => acc + x, 0),
+      "off street": geojson.features.reduce((total, feature) => 
+        (feature.geometry.properties.type === "normal" && !feature.geometry.properties.on_street ) ?
+       total + feature.geometry.properties.count : total, 0) * avgParkingLength ,
+       "electrique": geojson.features.reduce((total, feature) => 
+       (feature.geometry.properties.type === "electrique" ) ?
+      total + feature.geometry.properties.count : total, 0) * avgParkingLength,
+      "communauto": geojson.features.reduce((total, feature) => 
+      (feature.geometry.properties.type === "communauto" ) ?
+     total + feature.geometry.properties.count : total, 0) * avgParkingLength 
     };
 
     const MAXSTAY_LENGTH_CALC = {
@@ -854,6 +875,27 @@ class Map extends React.Component<PageProps, {}> {
             id: 'Autres_restrictions',
           }),
         y: ACTIVITY_LENGTH_CALC["restricted"]
+      },
+      {
+        x: formatMessage(
+          {
+            id: 'Stationnements_hors_rue',
+          }),
+        y: ACTIVITY_LENGTH_CALC["off street"]
+      },
+      {
+        x: formatMessage(
+          {
+            id: 'Circuit_electrique',
+          }),
+        y: ACTIVITY_LENGTH_CALC["electrique"]
+      },
+      {
+        x: formatMessage(
+          {
+            id: 'Communauto',
+          }),
+        y: ACTIVITY_LENGTH_CALC["communauto"]
       }
     ];
 
@@ -949,12 +991,13 @@ class Map extends React.Component<PageProps, {}> {
           }}
         ><div>
           <p>{this.state.selectedMarker.geometry.properties.description}</p>
-          { this.state.selectedMarker.geometry.properties.type !== 'communauto' && <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png" width="25px" style={{ marginRight: "10px"}} /> {this.state.selectedMarker.geometry.properties.count} <FormattedMessage id="places" /></p>}
-          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/MUTCD_D9-6.svg/1024px-MUTCD_D9-6.svg.png" width="25px" style={{ marginRight: "10px"}}/> {this.state.selectedMarker.geometry.properties.handicapped_count} <FormattedMessage id="handicapped_places" /></p>}
-          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>}
-          { this.state.selectedMarker.geometry.properties.type === 'normal' && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>}
+          <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Parking_icon.svg/1024px-Parking_icon.svg.png" width="25px" /> {this.state.selectedMarker.geometry.properties.count} places</p>
+          {this.state.selectedMarker.geometry.properties.type === "normal" && <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/MUTCD_D9-6.svg/1024px-MUTCD_D9-6.svg.png" width="25px"/> {this.state.selectedMarker.geometry.properties.handicapped_count} <FormattedMessage id="handicapped_places" /></p>}
+          {this.state.selectedMarker.geometry.properties.type === "normal" && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_hour} $CA /<FormattedMessage id="heure" /></p>}
+          {this.state.selectedMarker.geometry.properties.type === "normal" && <p>{this.state.selectedMarker.geometry.properties.regulation}: {this.state.selectedMarker.geometry.properties.price_per_day} $CA /<FormattedMessage id="day" /></p>}
           <p>{this.state.selectedMarker.geometry.properties.address}</p>
           <p><a href={"https://www.google.com/maps/search/?api=1&query=" + this.state.selectedMarker.geometry.coordinates[1].toString() + "," + this.state.selectedMarker.geometry.coordinates[0].toString()} ><AiOutlinePushpin /> <FormattedMessage id="go_to_this_place" /></a></p>
+          {/* {this.state.selectedMarker.geometry.properties.img !== null && <img src={require(this.state.selectedMarker.geometry.properties.img)} width="100%" />} */}
         </div></Card>}
 
 
@@ -1117,7 +1160,7 @@ class Map extends React.Component<PageProps, {}> {
                     {(
                       (activityPieData.reduce((pre, now) => now.y + pre, 0) /
                       avgParkingLength
-                    ) + geojson.features.map((current) => current.geometry.properties.count ).reduce((a, b) => a + b, 0)
+                    )
                     ).toLocaleString("en", {
                       style: "decimal",
                       maximumFractionDigits: 0,
@@ -1133,7 +1176,7 @@ class Map extends React.Component<PageProps, {}> {
                     style: "decimal",
                     maximumFractionDigits: 0,
                     minimumFractionDigits: 0,
-                  })}{" "}
+                  })}
                   <FormattedMessage id="places" />
                 </span>
               )}
@@ -1294,7 +1337,7 @@ class Map extends React.Component<PageProps, {}> {
         </Button>}
 
       </Layout>
-    );
+    )
     
   }
 }

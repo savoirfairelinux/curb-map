@@ -21,6 +21,8 @@ export default {
   'Stationnement_interdit_mobile': 'Forbidden',
   'Taxis_autres': 'Taxi, TNC, Other PUDO',
   'Debarcaderes': 'Drop-off zone',
+  'Taxis_autres': 'Taxi, TNC, Other PUDO',
+  'Debarcarders': 'Loading',
   'Transit': 'Transit',
   'Stationnement_gratuit': 'Free Parking',
   'Stationnement_gratuit_mobile': 'Free',
@@ -55,5 +57,8 @@ export default {
   'consent_p9': 'To find out more about the city of Montreal\'s digital data charter',
   'consent_p10': 'To learn more about the experiment',
   'consent_p11': 'Click here',
-  'go_to_this_place': 'Go to this place'
+  'go_to_this_place': 'Go to this place',
+  'Stationnements_hors_rue': 'Off street parking',
+  'Circuit_electrique': 'Circuit_electrique',
+  'Communauto': 'Communauto'
 }

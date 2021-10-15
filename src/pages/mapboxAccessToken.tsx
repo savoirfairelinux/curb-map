@@ -65,7 +65,10 @@ export const ACTIVITY_COLOR_MAP = {
   "passenger loading": "#FF9100",
   "loading": "#FFEA00",
   // "transit": "#37B34A",
-  "restricted": "#AA00FF"
+  "restricted": "#AA00FF",
+  "off street": "#0000FF",
+  "electric": "#1A4E74",
+  "communauto": "#93C13D"
 };
 const scaledWidth = (width: number) => {
   return {
