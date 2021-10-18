@@ -342,9 +342,7 @@ class Map extends React.Component<PageProps, {}> {
 
   _setMapData = (newData: any) => {
     const map = this._getMap();
-    if (map) {
-      map.getSource("curblrData").setData(newData);
-    }
+    map?.getSource("curblrData")?.setData(newData);
   };
 
   _getMap = () => {
@@ -493,12 +491,8 @@ class Map extends React.Component<PageProps, {}> {
       });
     };
 
-    // Hack to fix slow map
-    setTimeout(() => {
-      this.changeGeoData(geoDataFiles[1]["path"]);
-      this.changeGeoData(geoDataFiles[0]["path"]);
-    }, 2000)
-
+    this.changeGeoData(geoDataFiles[1]["path"]);
+    this.changeGeoData(geoDataFiles[0]["path"]);
   }
 
   componentWillUnmount() {
