@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import findRoute, {
   getUrlQuery,
-} from '/home/larbizard/Documents/SFL/fabmob/curb-map/node_modules/umi-build-dev/lib/findRoute.js';
+} from '/home/lgharib/Documents/SFL/fabmob/curb-map/node_modules/umi-build-dev/lib/findRoute.js';
 
 // runtime plugins
 const plugins = require('umi/_runtimePlugin');
@@ -223,7 +223,7 @@ export default (__IS_BROWSER ? null : serverRender);
     // Umi UI Bubble
     require('../../../node_modules/umi-plugin-ui/lib/bubble').default({
       port: 3000,
-      path: '/home/larbizard/Documents/SFL/fabmob/curb-map',
+      path: '/home/lgharib/Documents/SFL/fabmob/curb-map',
       currentProject: '',
       isBigfish: undefined,
     });
