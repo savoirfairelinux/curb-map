@@ -1247,7 +1247,7 @@ class Map extends React.Component<PageProps, {}> {
           }}
         >
           {getLocale() === 'en-US' ? 
-          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?embedded=true" width="380" height="700" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe> :
+          <iframe src="https://docs.google.com/forms/d/e/1FAIpQLScVODNR4kBni0rLRlyyMrsHl8RtYHopsSH5AjrkP4H5SktRiQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe> :
           <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSf1v6KRZhsh-CvjUjtWaPusWWYXGqxfjhUTkrCosu8CjJZ1rQ/viewform?embedded=true" width="380" height="700" frameBorder="0" marginHeight="0" marginWidth="0">Loading…</iframe>}
         </Card>}
 
