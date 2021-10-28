@@ -379,7 +379,10 @@ class Map extends React.Component<PageProps, {}> {
         })
       )
       // Add point layer to map
-      .set("layers", defaultMapStyle.get("layers").push(dataLayer));
+      .set("layers", defaultMapStyle.get("layers").push(dataLayer))
+      // Add sprite and glyphs to map
+      .set("sprite", "mapbox://sprites/emilyeros/ck2zof08b08gu1cllljkqj54m")
+      .set("glyphs", "mapbox://fonts/emilyeros/{fontstack}/{range}.pbf");
 
     this.setState({ mapStyle });
   };
