@@ -55,6 +55,9 @@ export default {
     'consent_p9': 'Pour en savoir plus sur la charte des données numériques de la ville de Montréal',
     'consent_p10': 'Pour en savoir plus sur l\'expérimentation',
     'consent_p11': 'Cliquez ici',
-    'go_to_this_place': 'Aller vers ce lieu'
+    'go_to_this_place': 'Aller vers ce lieu',
+    'Stationnements_hors_rue': 'Stationnement hors rue',
+    'Circuit_electrique': 'Circuit_electrique',
+    'Communauto': 'Communauto'
   }
   
