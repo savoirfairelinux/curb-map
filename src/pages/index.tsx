@@ -283,7 +283,9 @@ class Map extends React.Component<PageProps, {}> {
 
   state = {
     mode: "activity",
-    day: "mo",
+    month: "01",
+    dayOfMonth: "01",
+    dayOfWeek: "mo",
     time: "08:01",
     mapStyle: defaultMapStyle,
     viewport: {
@@ -372,7 +374,7 @@ class Map extends React.Component<PageProps, {}> {
           type: "geojson",
           data: renderCurblrData(
             this.props.curblr.data,
-            this.state.day,
+            this.state.dayOfWeek,
             this.state.time,
             this.state.mode
           )
@@ -525,7 +527,9 @@ class Map extends React.Component<PageProps, {}> {
 
     var data = renderCurblrData(
       this.props.curblr.data,
-      this.state.day,
+      this.state.month,
+      this.state.dayOfMonth,
+      this.state.dayOfWeek,
       value,
       this.state.mode
     );
@@ -533,11 +537,62 @@ class Map extends React.Component<PageProps, {}> {
   };
 
   changeDay = (value: any) => {
-    this.setState({ day: value });
+    this.setState({ dayOfWeek: value });
+
+    var data = renderCurblrData(
+      this.props.curblr.data,
+      this.state.month,
+      this.state.dayOfMonth,
+      value,
+      this.state.time,
+      this.state.mode
+    );
+    this._setMapData(data);
+  };
+
+  buildDayOfMonthOptions = () => {
+    const nbDaysInMonth = (() => {
+      const month = this.state.month;
+      if (["04", "06", "09", "01"].includes(month)) {
+        return 30;
+      }
+      else if (month == "02") {
+        return 28;
+      }
+      else {
+        return 31;
+      }
+    })();
+    const options = [];
+    for (let i = 1; i <= nbDaysInMonth; i++) {
+      const day = `${i}`.padStart(2,'0');
+      options.push(<Select.Option value={day}><FormattedMessage id={day} /></Select.Option>)
+    }
+    return options
+  }
+
+  changeDayOfMonth = (value: any) => {
+    this.setState({ dayOfMonth: value });
+
+    var data = renderCurblrData(
+      this.props.curblr.data,
+      this.state.month,
+      value,
+      this.state.dayOfWeek,
+      this.state.time,
+      this.state.mode
+    );
+    this._setMapData(data);
+  };
+
+  changeMonth = (value: any) => {
+    this.setState({ month: value });
 
     var data = renderCurblrData(
       this.props.curblr.data,
       value,
+      this.state.dayOfMonth,
+      this.state.dayOfWeek,
       this.state.time,
       this.state.mode
     );
@@ -549,7 +604,9 @@ class Map extends React.Component<PageProps, {}> {
 
     var data = renderCurblrData(
       this.props.curblr.data,
-      this.state.day,
+      this.state.month,
+      this.state.dayOfMonth,
+      this.state.dayOfWeek,
       this.state.time,
       event.target.value
     );
@@ -569,7 +626,9 @@ class Map extends React.Component<PageProps, {}> {
 
     var data = renderCurblrData(
       this.props.curblr.data,
-      this.state.day,
+      this.state.month,
+      this.state.dayOfMonth,
+      this.state.dayOfWeek,
       this.state.time,
       this.state.mode
     );
@@ -583,7 +642,9 @@ class Map extends React.Component<PageProps, {}> {
     const data_fetched_njson = await data_awaited;
     var data = renderCurblrData(
       data_fetched_njson,
-      this.state.day,
+      this.state.month,
+      this.state.dayOfMonth,
+      this.state.dayOfWeek,
       this.state.time,
       this.state.mode
     );
@@ -711,7 +772,9 @@ class Map extends React.Component<PageProps, {}> {
   render() {
     const { viewport,
             mapStyle,
-            day,
+            month,
+            dayOfMonth,
+            dayOfWeek,
             time,
             mode,
             showHideCard,
@@ -734,7 +797,7 @@ class Map extends React.Component<PageProps, {}> {
   const dt_to_set = (old_VS_new_selector? data_to_replace : this.props.curblr.data);
   const features = renderCurblrData(
       dt_to_set,
-      this.state.day,
+      this.state.dayOfWeek,
       this.state.time,
       this.state.mode
     );
@@ -1040,7 +1103,39 @@ class Map extends React.Component<PageProps, {}> {
             )}
           </Select>
           <Select 
-            defaultValue={day} 
+            defaultValue={month}
+            onChange={this.changeMonth}
+            style={{
+              margin: "0.05rem",
+              width: isMobile ? "100%" : "49.5%",
+            }}
+          >
+            <Select.Option value="01"><FormattedMessage id="January" /></Select.Option>
+            <Select.Option value="02"><FormattedMessage id="February" /></Select.Option>
+            <Select.Option value="03"><FormattedMessage id="March" /></Select.Option>
+            <Select.Option value="04"><FormattedMessage id="April" /></Select.Option>
+            <Select.Option value="05"><FormattedMessage id="May" /></Select.Option>
+            <Select.Option value="06"><FormattedMessage id="June" /></Select.Option>
+            <Select.Option value="07"><FormattedMessage id="July" /></Select.Option>
+            <Select.Option value="08"><FormattedMessage id="August" /></Select.Option>
+            <Select.Option value="09"><FormattedMessage id="September" /></Select.Option>
+            <Select.Option value="10"><FormattedMessage id="October" /></Select.Option>
+            <Select.Option value="11"><FormattedMessage id="November" /></Select.Option>
+            <Select.Option value="12"><FormattedMessage id="December" /></Select.Option>
+          </Select>
+          <Select
+            defaultValue={dayOfMonth}
+            onChange={this.changeDayOfMonth}
+            style={{
+              margin: "0.05rem",
+              width: isMobile ? "100%" : "49.5%",
+            }}
+          >
+            {this.buildDayOfMonthOptions()}
+            
+          </Select>
+          <Select
+            defaultValue={dayOfWeek}
             onChange={this.changeDay}
             style={{
               margin: "0.05rem",

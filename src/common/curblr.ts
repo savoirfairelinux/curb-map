@@ -1,36 +1,64 @@
 
 import {Feature, LineString, Point, FeatureCollection} from '@turf/helpers'
 
-function convertTimeSrtToMinOfDay(timeStr:string):number {
-    var timeParts = timeStr.split(":");
-    return (parseInt(timeParts[0]) * 60) + parseInt(timeParts[1]);
-}
+export function filterRegulation(
+    regulation: Regulation,
+    filterMonth: string,
+    filterDayOfMonth: string,
+    filterDayOfWeek: string,
+    filterTime: string,
+    filterUserClass: string,
+  ): boolean {
+    // Check userClasses
+    if (regulation.userClasses) {
+        if (
+            !regulation.userClasses?.some((userClass) => userClass.classes?.includes(filterUserClass)
+            )
+        ) {
+            return false;
+        }
+    }
 
-export function filterTimeAndDay(regulation: Regulation, filterDayOfWeek: string, filterTimeStr: string): boolean {
-    var filterTime = convertTimeSrtToMinOfDay(filterTimeStr);
+    // Check timeSpans
     if (regulation.timeSpans && regulation.timeSpans.length) {
+        const filterDate = `${filterMonth}-${filterDayOfMonth}`;
+
         for (var timeSpan of regulation.timeSpans) {
+            // Check effectiveDates
+            if (timeSpan.effectiveDates) {
+                for (var dates of timeSpan.effectiveDates) {
+                    if (dates.from < dates.to) {
+                        if (filterDate < dates.from || filterDate > dates.to) {
+                            return false;
+                        }
+                    } else {
+                        if (filterDate < dates.from && filterDate > dates.to) {
+                            return false;
+                        }
+                    }
+
+                }
+            }
+            // Check daysOfWeek
             var days:string[] = [];
             if (timeSpan.daysOfWeek == undefined) {
                 days = days.concat(["mo", "tu", "we", "th", "fr", "sa", "su"]);
             } else {
                 days = days.concat(timeSpan.daysOfWeek.days);
             }
-            for (var day of days) {
-                if (day == filterDayOfWeek) {
-                    if (timeSpan.timesOfDay) {
-                        for (var times of timeSpan.timesOfDay) {
-                            var from = convertTimeSrtToMinOfDay(times.from);
-                            var to = convertTimeSrtToMinOfDay(times.to);
-                            if (filterTime >= from && filterTime <= to) {
-                                return true;
-                            }
-                        }
-                    }
-                    else {
+            if (!days.includes(filterDayOfWeek)) {
+                return false;
+            }
+            // Check timesOfDay
+            if (timeSpan.timesOfDay !== undefined) {
+                for (var times of timeSpan.timesOfDay) {
+                    if (filterTime >= times.from && filterTime <= times.to) {
                         return true;
                     }
                 }
+            }
+            else {
+                return true;
             }
         }
         return false;
@@ -40,10 +68,11 @@ export function filterTimeAndDay(regulation: Regulation, filterDayOfWeek: string
 }
 
 
-//TODO FILTER DAY MONTH
 export function filterCurblrData (
     data: CurbFeatureCollection,
-    day: string,
+    month: string,
+    dayOfMonth: string,
+    dayOfWeek: string,
     time: string
   ): CurbFeatureCollection {
     let filteredData = new CurbFeatureCollection();
@@ -62,7 +91,7 @@ export function filterCurblrData (
         sortedCurbFeatures.add(filteredFeatureDefault);
 
         for (const regulation of curbFeature.properties.regulations) {
-            if (!filterTimeAndDay(regulation, day, time)) continue;
+            if (!filterRegulation(regulation, month, dayOfMonth, dayOfWeek, time, "")) continue;
 
             let filteredFeature = new CurbFeature();
             filteredFeature.geometry = curbFeature.geometry;
@@ -168,8 +197,8 @@ export interface DesignatedPeriods {
 }
 
 export class TimeSpan {
-    effectiveDates?:[{to:string, from:string}];//TODO FILTER DAY MONTH
-    daysOfWeek:DaysOfWeek;
+    effectiveDates?:[{to:string, from:string}];
+    daysOfWeek?:DaysOfWeek;
     daysOfMonth?:Array<string|"even"|"odd"|"last">;
     timesOfDay?:Array<TimesOfDay>;
     designatedPeriods?:Array<DesignatedPeriods>

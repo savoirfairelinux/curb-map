@@ -3,7 +3,7 @@ import { DvaModelBuilder } from "dva-model-creator";
 import { time, day, priority, activity } from "../actions/filter";
 import { fetchGeoData, loadGeoData } from "../actions/geo"
 import geojsonData from '@/assets/data/mtl-fusion-plaza.curblr.json';
-import { CurbFeature, CurbFeatureCollection, filterTimeAndDay } from '@/common/curblr';
+import { CurbFeature, CurbFeatureCollection } from '@/common/curblr';
 import { FeatureCollection, featureCollection, feature, LineString } from '@turf/helpers';
 import {fromJS} from 'immutable';
 import mapStyle from '../assets/style.json';

@@ -128,12 +128,14 @@ export const scaleControlStyle = {
 };
 export const renderCurblrData = (
   data: CurbFeatureCollection,
-  day: string,
+  month: string,
+  dayOfMonth: string,
+  dayOfWeek: string,
   time: string,
   filterType: string
 ): FeatureCollection<LineString> => {
   var renderData = featureCollection<LineString>([]);
-  var filteredData = filterCurblrData(data, day, time); //TODO FILTER DAY MONTH
+  var filteredData = filterCurblrData(data, month, dayOfMonth, dayOfWeek, time);
 
   for (var curbFeature of filteredData.features) {
     var renderFeature = feature<LineString>(curbFeature.geometry);
@@ -145,7 +147,7 @@ export const renderCurblrData = (
         curbFeature.properties.location.shstLocationEnd -
         curbFeature.properties.location.shstLocationStart;
 
-      renderFeature.properties.priority = regulation.priority;
+      renderFeature.properties.priority = regulation.rule.priorityCategory;
 
       // if(priority) {
       var offsetPriority = 0;
